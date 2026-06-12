@@ -26,6 +26,29 @@
             background-color: var(--bg-color);
             color: var(--text-main);
             overflow-x: hidden;
+            padding-top: 60px; /* Espaço para o cabeçalho fixo */
+        }
+
+        /* Cabeçalho Fixo */
+        .header-fixed {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            background-color: #0f172a; /* Azul escuro */
+            color: #ffffff;
+            text-align: center;
+            padding: 20px 20px;
+            font-size: 1.2rem;
+            font-weight: 800;
+            letter-spacing: 2px;
+            z-index: 1000;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+            text-transform: uppercase;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 10px;
         }
 
         /* Menu de Navegação Lateral */
@@ -54,6 +77,8 @@
         .nav-dot:hover, .nav-dot.active { background-color: var(--accent); transform: scale(1.3); }
         .nav-dot[href="#athos"].active, .nav-dot[href="#athos"]:hover { background-color: var(--athos); }
         .nav-dot[href="#impacto"].active, .nav-dot[href="#impacto"]:hover { background-color: #0ea5e9; }
+        .nav-dot[href="#fotografia"].active, .nav-dot[href="#fotografia"]:hover { background-color: var(--primary); }
+        .nav-dot[href="#conclusao"].active, .nav-dot[href="#conclusao"]:hover { background-color: #475569; }
 
         .nav-dot::after {
             content: attr(data-label);
@@ -76,8 +101,8 @@
 
         /* Seções de Conteúdo (Rolagem) */
         .section {
-            min-height: 100vh;
-            padding: 80px 20px;
+            min-height: calc(100vh - 60px);
+            padding: 60px 20px;
             display: flex;
             justify-content: center;
             align-items: center;
@@ -101,9 +126,10 @@
 
         #fase2 .container { border-top-color: var(--warning); }
         #fase3 .container { border-top-color: var(--success); }
-        #resumo .container { border-top-color: var(--primary); }
+        #fotografia .container { border-top-color: var(--primary); }
         #athos .container { border-top-color: var(--athos); }
         #impacto .container { border-top-color: #0ea5e9; }
+        #conclusao .container { border-top-color: #475569; }
 
         /* Tipografia */
         .phase-badge {
@@ -217,6 +243,7 @@
         .grid-top { display: grid; grid-template-columns: 1fr 1.2fr; gap: 20px; margin-bottom: 30px; }
         .grid-cards { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; margin-bottom: 25px; }
         .content-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 40px; align-items: start; }
+        .comparison-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 40px; margin-top: 30px; }
         
         .flow-card {
             background: var(--bg-color);
@@ -294,7 +321,7 @@
 
         /* 📱 RESPONSIVIDADE - TABLETS E ECRÃS MÉDIOS */
         @media (max-width: 992px) {
-            .content-grid, .grid-top, .grid-cards, .overview-grid { grid-template-columns: 1fr; }
+            .content-grid, .grid-top, .grid-cards, .overview-grid, .comparison-grid { grid-template-columns: 1fr; }
             .container { padding: 30px; }
             .side-nav { display: none; }
             h2 { font-size: 1.8rem; }
@@ -321,21 +348,25 @@
             .simulador-btn { width: 100%; justify-content: center; font-size: 1rem; }
             .grid-cards { gap: 15px; }
             
-            /* Ajustes finos de margens para mobile */
             .scroll-indicator { bottom: 15px; }
-            .section { padding-bottom: 60px; } /* Evitar sobreposição com indicador de scroll */
+            .section { padding-bottom: 60px; }
         }
     </style>
 </head>
 <body>
 
+    <header class="header-fixed">
+        <i class="fa-solid fa-arrows-spin"></i> FLUXO TRANSACIONAL
+    </header>
+
     <nav class="side-nav">
         <a href="#fase1" class="nav-dot active" data-label="1. Captura"></a>
         <a href="#fase2" class="nav-dot" data-label="2. Registro e Recebível"></a>
         <a href="#fase3" class="nav-dot" data-label="3. Liquidação"></a>
-        <a href="#resumo" class="nav-dot" data-label="Visão Global"></a>
+        <a href="#fotografia" class="nav-dot" data-label="A Fotografia Completa"></a>
         <a href="#athos" class="nav-dot" data-label="A Solução Athos Pay"></a>
         <a href="#impacto" class="nav-dot" data-label="O Impacto Financeiro"></a>
+        <a href="#conclusao" class="nav-dot" data-label="Comparativo de Mercado"></a>
     </nav>
 
     <!-- FASE 1 -->
@@ -348,7 +379,6 @@
             </div>
             
             <div>
-                <!-- Top Row: Eventos e Circuito -->
                 <div class="grid-top">
                     <div class="events-box">
                         <h4 style="color: var(--primary); font-size: 0.95rem;"><i class="fa-solid fa-code-branch"></i> O que pode acontecer com a transação?</h4>
@@ -375,7 +405,6 @@
                     </div>
                 </div>
 
-                <!-- Middle Row: Tópicos -->
                 <h3 style="color: var(--primary); font-size: 1.2rem; margin-bottom: 20px; text-align: center; opacity: 0; animation: fadeIn 0.6s ease-out 0.4s forwards;">O que você tem em mãos no momento da aprovação?</h3>
                 
                 <div class="grid-cards">
@@ -404,7 +433,6 @@
                     </div>
                 </div>
 
-                <!-- Exemplo Prático -->
                 <div class="example-box">
                     <div class="example-icon"><i class="fa-solid fa-users"></i></div>
                     <div class="example-text">
@@ -412,7 +440,6 @@
                     </div>
                 </div>
 
-                <!-- Banner de Alerta a Fechar a Fase 1 -->
                 <div class="alert-banner">
                     <div class="alert-icon"><i class="fa-solid fa-triangle-exclamation"></i></div>
                     <div class="alert-text">
@@ -438,14 +465,12 @@
             </div>
             
             <div>
-                <!-- Top Row: Gancho -->
                 <div class="alert-box" style="text-align: center; border-left: none; background: #f8fafc; border: 1px solid #e2e8f0;">
                     <p style="font-size: 1.05rem; color: #0f172a; line-height: 1.5; margin: 0; font-weight: 600;">
                         <i class="fa-solid fa-eye" style="margin-right: 8px; color: var(--accent);"></i> As Registradoras e o Fisco estavam de fora. Agora, entram finalmente no jogo!
                     </p>
                 </div>
 
-                <!-- Middle Row: Os Tópicos -->
                 <h3 style="color: var(--primary); font-size: 1.2rem; margin-bottom: 20px; text-align: center; opacity: 0; animation: fadeIn 0.6s ease-out 0.4s forwards;">Os Pilares da Fase 2</h3>
                 
                 <div class="grid-cards" style="grid-template-columns: 1fr 1fr; max-width: 900px; margin-left: auto; margin-right: auto;">
@@ -453,7 +478,7 @@
                         <div class="flow-icon" style="color: var(--warning);"><i class="fa-solid fa-file-contract"></i></div>
                         <div class="flow-text">
                             <h4>1. O Nascimento do Recebível</h4>
-                            <p>A adquirente regista a venda na <strong>CERC, Nuclea ou TAG</strong>. Nasce a UR (Unidade de Recebível) contendo o valor líquido, a data do repasse (D+1, D+30) e o CNPJ do beneficiário.</p>
+                            <p>A adquirente registra a venda na <strong>CERC, Nuclea ou TAG</strong>. Nasce a UR (Unidade de Recebível) contendo o valor líquido, a data do repasse (D+1, D+30) e o CNPJ do beneficiário.</p>
                         </div>
                     </div>
                     
@@ -466,9 +491,8 @@
                     </div>
                 </div>
 
-                <!-- Exemplo Mercado Livre (Split de Pagamento) -->
                 <div class="split-ml-box">
-                    <h4 style="color: var(--primary); margin-bottom: 20px; display: flex; align-items: center; gap: 10px; justify-content: center;">
+                    <h4 style="color: var(--primary); margin-bottom: 20px; display: flex; align-items: center; justify-content: center; gap: 10px;">
                         <i class="fa-solid fa-scissors" style="color: var(--warning);"></i> O Exemplo do Mercado Livre (Split de Pagamento)
                     </h4>
                     <div class="content-grid" style="gap: 30px;">
@@ -555,17 +579,16 @@
 
         </div>
         <div class="scroll-indicator">
-            Rolar para baixo
+            A Fotografia Completa
             <i class="fa-solid fa-chevron-down"></i>
         </div>
     </section>
 
-    <!-- RESUMO -->
-    <section id="resumo" class="section">
+    <!-- FOTOGRAFIA COMPLETA (3 CARDS) -->
+    <section id="fotografia" class="section">
         <div class="container">
             <div style="text-align: center; margin-bottom: 40px;">
                 <h2>A Fotografia Completa</h2>
-                <p class="subtitle">O caminho de R$ 1.000,00: Da captura ao saldo em conta.</p>
             </div>
             
             <div class="overview-grid">
@@ -622,7 +645,6 @@
                 </div>
 
                 <div style="display: flex; flex-direction: column; gap: 15px;">
-                    <!-- Benefício 1: Economia Tributária -->
                     <div class="athos-highlight">
                         <div class="athos-icon"><i class="fa-solid fa-file-shield"></i></div>
                         <div>
@@ -634,7 +656,6 @@
                         </div>
                     </div>
 
-                    <!-- Benefício 2: Livre de Travas -->
                     <div class="athos-highlight">
                         <div class="athos-icon"><i class="fa-solid fa-lock"></i></div>
                         <div>
@@ -646,7 +667,6 @@
                         </div>
                     </div>
 
-                    <!-- Benefício 3: Conciliação Absoluta -->
                     <div class="athos-highlight">
                         <div class="athos-icon"><i class="fa-solid fa-magnifying-glass-chart"></i></div>
                         <div>
@@ -676,21 +696,18 @@
             </div>
             
             <div class="overview-grid" style="margin-bottom: 40px;">
-                <!-- Impacto 1 -->
                 <div class="overview-card" style="border-top: 6px solid var(--success); text-align: left; align-items: flex-start; padding: 30px;">
                     <div class="flow-icon" style="color: var(--success); margin-bottom: 20px; width: 50px; height: 50px; font-size: 1.2rem;"><i class="fa-solid fa-arrow-trend-down"></i></div>
                     <h3 style="font-size: 1.3rem; margin-bottom: 15px;">Até 40% de Redução</h3>
                     <p style="text-align: left; font-size: 0.95rem; color: var(--text-main); line-height: 1.6;">Ao fracionar o recebível na raiz, a sua base de cálculo diminui. Isto evita que a sua empresa salte para faixas com alíquotas efetivas mais elevadas no Simples Nacional.</p>
                 </div>
                 
-                <!-- Impacto 2 -->
                 <div class="overview-card" style="border-top: 6px solid var(--warning); text-align: left; align-items: flex-start; padding: 30px;">
                     <div class="flow-icon" style="color: var(--warning); margin-bottom: 20px; width: 50px; height: 50px; font-size: 1.2rem;"><i class="fa-solid fa-calendar-check"></i></div>
                     <h3 style="font-size: 1.3rem; margin-bottom: 15px;">Liquidez Flexível (D+1 a D+28)</h3>
                     <p style="text-align: left; font-size: 0.95rem; color: var(--text-main); line-height: 1.6;">Tenha total controle sobre o seu fluxo de caixa. Agende os repasses de forma programada e evite arcar com taxas de antecipação onerosas e desnecessárias.</p>
                 </div>
 
-                <!-- Impacto 3 -->
                 <div class="overview-card" style="border-top: 6px solid var(--athos); text-align: left; align-items: flex-start; padding: 30px;">
                     <div class="flow-icon" style="color: var(--athos); margin-bottom: 20px; width: 50px; height: 50px; font-size: 1.2rem;"><i class="fa-solid fa-hand-holding-dollar"></i></div>
                     <h3 style="font-size: 1.3rem; margin-bottom: 15px;">O Fim da Bitributação</h3>
@@ -698,7 +715,6 @@
                 </div>
             </div>
 
-            <!-- Chamada para o Simulador -->
             <div class="simulador-banner">
                 <div style="flex: 1; min-width: 300px;">
                     <h3 style="color: white; font-size: 1.8rem; margin-bottom: 10px; display: flex; align-items: center; justify-content: center;"><i class="fa-solid fa-calculator" style="color: var(--success); margin-right: 15px;"></i> Descubra a sua economia</h3>
@@ -710,6 +726,68 @@
                         <i class="fa-solid fa-arrow-right"></i>
                     </a>
                 </div>
+            </div>
+        </div>
+        <div class="scroll-indicator">
+            Ver Comparativo
+            <i class="fa-solid fa-chevron-down"></i>
+        </div>
+    </section>
+
+    <!-- CONCLUSÃO / COMPARATIVA -->
+    <section id="conclusao" class="section">
+        <div class="container">
+            <div style="text-align: center; margin-bottom: 40px;">
+                <div class="phase-badge" style="background: #e2e8f0; color: #475569;">Conclusão</div>
+                <h2>Comparativo de Mercado</h2>
+            </div>
+            
+            <div class="comparison-grid">
+                
+                <!-- Fluxo Normal -->
+                <div style="background: #fff1f2; border: 1px solid #fecaca; border-radius: 16px; padding: 40px 30px; position: relative;">
+                    <div style="position: absolute; top: -15px; left: 50%; transform: translateX(-50%); background: var(--danger); color: white; padding: 6px 20px; border-radius: 20px; font-weight: 800; font-size: 0.85rem; letter-spacing: 1px;">MERCADO TRADICIONAL</div>
+                    
+                    <div style="margin-top: 10px; display: flex; flex-direction: column; gap: 25px;">
+                        <div>
+                            <h4 style="color: #991b1b; font-size: 1.2rem; display: flex; align-items: center; gap: 10px;"><i class="fa-solid fa-1" style="background: #fca5a5; padding: 5px 10px; border-radius: 8px; color: #7f1d1d;"></i> Captura</h4>
+                            <p style="font-size: 0.95rem; color: #7f1d1d; margin-top: 8px; line-height: 1.5;">Geração de um <strong>NSU único</strong> para todo o valor. O limite é bloqueado sem qualquer divisão de titularidade.</p>
+                        </div>
+                        <div style="height: 1px; background: #fca5a5;"></div>
+                        <div>
+                            <h4 style="color: #991b1b; font-size: 1.2rem; display: flex; align-items: center; gap: 10px;"><i class="fa-solid fa-2" style="background: #fca5a5; padding: 5px 10px; border-radius: 8px; color: #7f1d1d;"></i> Registro</h4>
+                            <p style="font-size: 0.95rem; color: #7f1d1d; margin-top: 8px; line-height: 1.5;">Gera apenas <strong>1 UR concentrada</strong> no lojista. O Fisco (DIMP) enxerga o lojista como dono de 100% daquele volume.</p>
+                        </div>
+                        <div style="height: 1px; background: #fca5a5;"></div>
+                        <div>
+                            <h4 style="color: #991b1b; font-size: 1.2rem; display: flex; align-items: center; gap: 10px;"><i class="fa-solid fa-3" style="background: #fca5a5; padding: 5px 10px; border-radius: 8px; color: #7f1d1d;"></i> Liquidação</h4>
+                            <p style="font-size: 0.95rem; color: #7f1d1d; margin-top: 8px; line-height: 1.5;">O dinheiro entra total na conta (gerando <strong>bitributação</strong>). Repasses são manuais. Risco alto de travas bancárias prenderem o dinheiro dos parceiros.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Fluxo Athos Pay -->
+                <div style="background: #eef2ff; border: 1px solid #c7d2fe; border-radius: 16px; padding: 40px 30px; position: relative; box-shadow: 0 10px 30px rgba(79, 70, 229, 0.15);">
+                    <div style="position: absolute; top: -15px; left: 50%; transform: translateX(-50%); background: var(--athos); color: white; padding: 6px 20px; border-radius: 20px; font-weight: 800; font-size: 0.85rem; letter-spacing: 1px;">COM ATHOS PAY</div>
+                    
+                    <div style="margin-top: 10px; display: flex; flex-direction: column; gap: 25px;">
+                        <div>
+                            <h4 style="color: #3730a3; font-size: 1.2rem; display: flex; align-items: center; gap: 10px;"><i class="fa-solid fa-1" style="background: #c7d2fe; padding: 5px 10px; border-radius: 8px; color: #312e81;"></i> Captura</h4>
+                            <p style="font-size: 0.95rem; color: #312e81; margin-top: 8px; line-height: 1.5;"><strong>Split de Recebíveis na raiz.</strong> O sistema intercepta e divide o NSU no exato momento da transação.</p>
+                        </div>
+                        <div style="height: 1px; background: #c7d2fe;"></div>
+                        <div>
+                            <h4 style="color: #3730a3; font-size: 1.2rem; display: flex; align-items: center; gap: 10px;"><i class="fa-solid fa-2" style="background: #c7d2fe; padding: 5px 10px; border-radius: 8px; color: #312e81;"></i> Registro</h4>
+                            <p style="font-size: 0.95rem; color: #312e81; margin-top: 8px; line-height: 1.5;">Criação de <strong>múltiplas URs independentes</strong>. A DIMP é remetida à SEFAZ já com os CNPJs e valores corretos de cada parceiro.</p>
+                        </div>
+                        <div style="height: 1px; background: #c7d2fe;"></div>
+                        <div>
+                            <h4 style="color: #3730a3; font-size: 1.2rem; display: flex; align-items: center; gap: 10px;"><i class="fa-solid fa-3" style="background: #c7d2fe; padding: 5px 10px; border-radius: 8px; color: #312e81;"></i> Liquidação</h4>
+                            <p style="font-size: 0.95rem; color: #312e81; margin-top: 8px; line-height: 1.5;">Tributação incide apenas sobre a receita própria <strong>(Elisão Fiscal)</strong>. Blindagem total contra travas e conciliação perfeita com a EFD-Reinf.</p>
+                        </div>
+                    </div>
+                </div>
+
             </div>
         </div>
     </section>
