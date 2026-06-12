@@ -1,0 +1,818 @@
+<!DOCTYPE html>
+<html lang="pt-PT" style="scroll-behavior: smooth;">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Fluxo Transacional Interativo</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <style>
+        :root {
+            --primary: #1e293b;
+            --accent: #3b82f6;
+            --success: #10b981;
+            --warning: #f59e0b;
+            --danger: #ef4444;
+            --athos: #4f46e5; /* Indigo para a seção Athos */
+            --bg-color: #f8fafc;
+            --card-bg: #ffffff;
+            --text-main: #334155;
+            --text-light: #64748b;
+        }
+
+        * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Inter', sans-serif; }
+        
+        body {
+            background-color: var(--bg-color);
+            color: var(--text-main);
+            overflow-x: hidden;
+        }
+
+        /* Menu de Navegação Lateral */
+        .side-nav {
+            position: fixed;
+            right: 30px;
+            top: 50%;
+            transform: translateY(-50%);
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+            z-index: 100;
+        }
+
+        .nav-dot {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            background-color: #cbd5e1;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            position: relative;
+            text-decoration: none;
+        }
+
+        .nav-dot:hover, .nav-dot.active {
+            background-color: var(--accent);
+            transform: scale(1.3);
+        }
+
+        .nav-dot[href="#athos"].active, .nav-dot[href="#athos"]:hover {
+            background-color: var(--athos);
+        }
+        
+        .nav-dot[href="#impacto"].active, .nav-dot[href="#impacto"]:hover {
+            background-color: #0ea5e9;
+        }
+
+        .nav-dot::after {
+            content: attr(data-label);
+            position: absolute;
+            right: 25px;
+            top: 50%;
+            transform: translateY(-50%);
+            background: var(--primary);
+            color: white;
+            padding: 4px 10px;
+            border-radius: 4px;
+            font-size: 0.8rem;
+            white-space: nowrap;
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.3s ease;
+        }
+
+        .nav-dot:hover::after {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        /* Seções de Conteúdo (Rolagem) */
+        .section {
+            min-height: 100vh;
+            padding: 80px 20px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            position: relative;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 1200px;
+            background: var(--card-bg);
+            border-radius: 20px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.08);
+            padding: 50px;
+            border-top: 8px solid var(--accent);
+            opacity: 0;
+            transform: translateY(50px);
+            transition: opacity 0.8s ease-out, transform 0.8s ease-out;
+        }
+
+        .container.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        #fase2 .container { border-top-color: var(--warning); }
+        #fase3 .container { border-top-color: var(--success); }
+        #resumo .container { border-top-color: var(--primary); }
+        #athos .container { border-top-color: var(--athos); }
+        #impacto .container { border-top-color: #0ea5e9; } /* Azul para o impacto financeiro */
+
+        /* Tipografia */
+        .phase-badge {
+            display: inline-block;
+            background: #e0f2fe;
+            color: var(--accent);
+            padding: 8px 16px;
+            border-radius: 30px;
+            font-weight: 800;
+            font-size: 0.9rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 15px;
+        }
+
+        h2 { font-size: 2.2rem; color: var(--primary); margin-bottom: 10px; line-height: 1.2; }
+        p.subtitle { font-size: 1.1rem; color: var(--text-light); margin-bottom: 40px; line-height: 1.5; }
+
+        /* Blocos de Fluxo Desenhado */
+        .flow-box {
+            background: var(--bg-color);
+            border: 1px solid #e2e8f0;
+            border-radius: 12px;
+            padding: 20px;
+            margin-bottom: 15px;
+            display: flex;
+            align-items: flex-start;
+            gap: 20px;
+            opacity: 0;
+            transform: translateX(-30px);
+            transition: all 0.6s ease-out;
+        }
+
+        .container.visible .flow-box { opacity: 1; transform: translateX(0); }
+        .container.visible .flow-box:nth-child(2) { transition-delay: 0.2s; }
+        .container.visible .flow-box:nth-child(3) { transition-delay: 0.4s; }
+
+        .flow-box:hover {
+            transform: translateX(10px) !important;
+            border-color: var(--accent);
+            box-shadow: 0 10px 20px rgba(0,0,0,0.05);
+        }
+
+        .flow-icon {
+            width: 50px;
+            height: 50px;
+            background: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.3rem;
+            color: var(--accent);
+            box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+            flex-shrink: 0;
+            transition: transform 0.3s;
+        }
+
+        .flow-box:hover .flow-icon { transform: scale(1.1) rotate(5deg); }
+        .flow-text h4 { font-size: 1.1rem; color: var(--primary); margin-bottom: 5px; }
+        .flow-text p { font-size: 0.9rem; color: var(--text-main); line-height: 1.5; }
+        .flow-text strong { color: var(--primary); }
+
+        /* Cenários / Eventos da Transação */
+        .events-box {
+            background: white;
+            border: 1px solid #e2e8f0;
+            border-radius: 12px;
+            padding: 15px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.02);
+            opacity: 0;
+            transform: translateY(20px);
+            transition: all 0.6s ease-out 0.2s;
+            text-align: center;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+
+        .container.visible .events-box { opacity: 1; transform: translateY(0); }
+
+        .events-grid {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            justify-content: center;
+            margin-top: 12px;
+        }
+
+        .event-tag {
+            font-size: 0.75rem;
+            font-weight: 700;
+            padding: 6px 12px;
+            border-radius: 8px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .event-tag.success { background: #d1fae5; color: #065f46; border: 1px solid #a7f3d0; }
+        .event-tag.warning { background: #fef3c7; color: #92400e; border: 1px solid #fde68a; }
+        .event-tag.danger { background: #fee2e2; color: #991b1b; border: 1px solid #fecaca; }
+
+        /* Componente Circuito */
+        .circuit-box {
+            background: #f1f5f9;
+            padding: 25px;
+            border-radius: 12px;
+            border: 1px solid #cbd5e1;
+            text-align: center;
+            opacity: 0;
+            transform: translateY(20px);
+            transition: all 0.6s ease-out 0.4s;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+        
+        .container.visible .circuit-box { opacity: 1; transform: translateY(0); }
+
+        .circuit-path {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 10px;
+            font-weight: 600;
+            color: var(--accent);
+            font-size: 0.85rem;
+            flex-wrap: wrap;
+            margin-top: 15px;
+        }
+
+        .circuit-node {
+            background: white;
+            padding: 8px 12px;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+            border: 1px solid #e2e8f0;
+        }
+
+        /* Classes para Layout Panorâmico (Grid Top e Grid Cards) e Responsividade */
+        .grid-top { display: grid; grid-template-columns: 1fr 1.2fr; gap: 20px; margin-bottom: 30px; }
+        .grid-cards { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; margin-bottom: 25px; }
+        .content-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 40px; align-items: start; }
+        
+        .flow-card {
+            background: var(--bg-color);
+            border: 1px solid #e2e8f0;
+            border-radius: 12px;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+            gap: 15px;
+            opacity: 0;
+            transform: translateY(20px);
+            transition: all 0.6s ease-out;
+        }
+        
+        .container.visible .flow-card { opacity: 1; transform: translateY(0); }
+        .container.visible .flow-card:nth-child(1) { transition-delay: 0.5s; }
+        .container.visible .flow-card:nth-child(2) { transition-delay: 0.6s; }
+        .container.visible .flow-card:nth-child(3) { transition-delay: 0.7s; }
+        
+        .flow-card:hover { transform: translateY(-5px) !important; border-color: var(--accent); box-shadow: 0 10px 20px rgba(0,0,0,0.05); }
+        .flow-card .flow-icon { margin-bottom: 5px; }
+
+        @media (max-width: 992px) {
+            .content-grid, .grid-top, .grid-cards, .overview-grid { grid-template-columns: 1fr; }
+            .container { padding: 30px; }
+            .side-nav { display: none; }
+            h2 { font-size: 1.8rem; }
+        }
+
+        /* Destaque / Exemplo */
+        .example-box {
+            background: #e0f2fe;
+            border: 1px solid #bae6fd;
+            border-radius: 12px;
+            padding: 20px;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            opacity: 0;
+            transform: translateY(20px);
+            transition: all 0.6s ease-out 0.8s;
+        }
+
+        .container.visible .example-box { opacity: 1; transform: translateY(0); }
+        .example-icon { font-size: 2rem; color: var(--accent); }
+        .example-text { font-size: 0.95rem; color: #0369a1; line-height: 1.5; }
+        .example-text strong { color: #0284c7; }
+
+        /* Banner de Alerta */
+        .alert-banner {
+            background: #fff1f2;
+            border: 1px solid #fecaca;
+            border-left: 6px solid var(--danger);
+            border-radius: 12px;
+            padding: 20px;
+            margin-top: 25px;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            opacity: 0;
+            transform: translateY(20px);
+            transition: all 0.6s ease-out 1s;
+        }
+
+        .container.visible .alert-banner { opacity: 1; transform: translateY(0); }
+        .alert-icon { font-size: 2rem; color: var(--danger); }
+        .alert-text { font-size: 1.05rem; color: #991b1b; font-weight: 600; line-height: 1.4; }
+
+        /* Alerta Simples (Fase 2) */
+        .alert-box {
+            background: #e0f2fe;
+            padding: 20px;
+            border-radius: 12px;
+            border-left: 5px solid var(--accent);
+            margin-bottom: 30px;
+            opacity: 0;
+            transform: translateY(20px);
+            transition: all 0.6s ease-out 0.2s;
+        }
+        .container.visible .alert-box { opacity: 1; transform: translateY(0); }
+
+        /* Exemplo Split Mercado Livre (Fase 2) */
+        .split-ml-box {
+            background: #f8fafc;
+            border: 1px solid #e2e8f0;
+            border-radius: 12px;
+            padding: 25px;
+            margin-bottom: 25px;
+            opacity: 0;
+            transform: translateY(20px);
+            transition: all 0.6s ease-out 0.6s;
+        }
+        .container.visible .split-ml-box { opacity: 1; transform: translateY(0); }
+        .split-card { background: white; padding: 15px; margin-bottom: 10px; border-radius: 0 8px 8px 0; border-left: 5px solid; box-shadow: 0 2px 8px rgba(0,0,0,0.05); display: flex; justify-content: space-between; align-items: center; transition: transform 0.3s; }
+        .split-card:hover { transform: scale(1.02); }
+
+        /* Visão Geral */
+        .overview-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 25px; }
+        .overview-card { background: var(--bg-color); border: 1px solid #e2e8f0; border-radius: 16px; padding: 30px 20px; text-align: center; display: flex; flex-direction: column; align-items: center; opacity: 0; transform: translateY(30px); transition: all 0.6s ease-out; }
+        .container.visible .overview-card { opacity: 1; transform: translateY(0); }
+
+        /* Estilos específicos da Seção Athos */
+        .athos-highlight { background: #eef2ff; border: 1px solid #c7d2fe; border-radius: 16px; padding: 30px; margin-bottom: 20px; display: flex; gap: 20px; align-items: flex-start; opacity: 0; transform: translateX(30px); transition: all 0.6s ease-out; }
+        .container.visible .athos-highlight { opacity: 1; transform: translateX(0); }
+        .container.visible .athos-highlight:nth-child(2) { transition-delay: 0.2s; }
+        .container.visible .athos-highlight:nth-child(3) { transition-delay: 0.4s; }
+        .athos-highlight:hover { border-color: var(--athos); box-shadow: 0 10px 25px rgba(79, 70, 229, 0.1); transform: translateY(-5px) !important; }
+        .athos-icon { width: 60px; height: 60px; background: white; border-radius: 12px; display: flex; align-items: center; justify-content: center; font-size: 1.5rem; color: var(--athos); box-shadow: 0 4px 6px rgba(0,0,0,0.05); flex-shrink: 0; }
+        
+        /* Badges Legais */
+        .legal-badge { display: inline-block; background: #e0e7ff; color: #4338ca; padding: 2px 8px; border-radius: 4px; font-size: 0.75rem; font-weight: 800; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 8px; border: 1px solid #c7d2fe; }
+
+        /* Instrução de Rolagem */
+        .scroll-indicator {
+            position: absolute;
+            bottom: 30px;
+            left: 50%;
+            transform: translateX(-50%);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            color: var(--text-light);
+            font-size: 0.9rem;
+            font-weight: 600;
+            animation: bounce 2s infinite;
+        }
+        .scroll-indicator i { font-size: 1.5rem; margin-top: 5px; }
+
+        @keyframes bounce {
+            0%, 20%, 50%, 80%, 100% { transform: translateY(0) translateX(-50%); }
+            40% { transform: translateY(-10px) translateX(-50%); }
+            60% { transform: translateY(-5px) translateX(-50%); }
+        }
+    </style>
+</head>
+<body>
+
+    <nav class="side-nav">
+        <a href="#fase1" class="nav-dot active" data-label="1. Captura"></a>
+        <a href="#fase2" class="nav-dot" data-label="2. Registo e Recebível"></a>
+        <a href="#fase3" class="nav-dot" data-label="3. Liquidação"></a>
+        <a href="#resumo" class="nav-dot" data-label="Visão Global"></a>
+        <a href="#athos" class="nav-dot" data-label="A Solução Athos Pay"></a>
+        <a href="#impacto" class="nav-dot" data-label="O Impacto Financeiro"></a>
+    </nav>
+
+    <!-- FASE 1 -->
+    <section id="fase1" class="section">
+        <div class="container">
+            <div>
+                <div class="phase-badge">Fase 1</div>
+                <h2>A Captura e Autorização</h2>
+                <p class="subtitle">O objetivo aqui é puramente velocidade e garantia de saldo.</p>
+            </div>
+            
+            <div>
+                <!-- Top Row: Eventos e Circuito -->
+                <div class="grid-top">
+                    <div class="events-box">
+                        <h4 style="color: var(--primary); font-size: 0.95rem;"><i class="fa-solid fa-code-branch"></i> O que pode acontecer com a transação?</h4>
+                        <div class="events-grid">
+                            <div class="event-tag success">Aprovada</div>
+                            <div class="event-tag warning">Cancelamento</div>
+                            <div class="event-tag warning">Devolução / Estorno</div>
+                            <div class="event-tag danger">Chargeback</div>
+                        </div>
+                    </div>
+
+                    <div class="circuit-box">
+                        <h4 style="color: var(--primary); margin-bottom: 5px;"><i class="fa-solid fa-microchip"></i> O Circuito Operacional Fechado</h4>
+                        <p style="font-size: 0.85rem; color: var(--text-light);">A comunicação é restrita para aprovar tudo em milissegundos.</p>
+                        <div class="circuit-path">
+                            <div class="circuit-node">Maquininha</div>
+                            <i class="fa-solid fa-arrow-right"></i>
+                            <div class="circuit-node">Adquirente</div>
+                            <i class="fa-solid fa-arrow-right"></i>
+                            <div class="circuit-node">Bandeira</div>
+                            <i class="fa-solid fa-arrow-right"></i>
+                            <div class="circuit-node">Banco Emissor</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Middle Row: Tópicos -->
+                <h3 style="color: var(--primary); font-size: 1.2rem; margin-bottom: 20px; text-align: center; opacity: 0; animation: fadeIn 0.6s ease-out 0.4s forwards;">O que você tem em mãos no momento da aprovação?</h3>
+                
+                <div class="grid-cards">
+                    <div class="flow-card">
+                        <div class="flow-icon"><i class="fa-solid fa-hashtag"></i></div>
+                        <div class="flow-text">
+                            <h4>1. O NSU</h4>
+                            <p>O <strong>NSU (Número Sequencial Único)</strong> é o "RG" gerado para registar a venda.</p>
+                        </div>
+                    </div>
+                    
+                    <div class="flow-card">
+                        <div class="flow-icon" style="color: var(--success);"><i class="fa-solid fa-check-double"></i></div>
+                        <div class="flow-text">
+                            <h4>2. A Autorização</h4>
+                            <p>A "senha" gerada pelo Banco Emissor. Confirma: <em>"Conferi aqui, o cliente tem limite/saldo e eu autorizo"</em>.</p>
+                        </div>
+                    </div>
+                    
+                    <div class="flow-card">
+                        <div class="flow-icon" style="color: var(--warning);"><i class="fa-solid fa-lock"></i></div>
+                        <div class="flow-text">
+                            <h4>3. A Separação de Saldo</h4>
+                            <p>No crédito, o limite diminui na hora. No PIX ou Débito, o valor sai da conta do cliente.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Exemplo Prático -->
+                <div class="example-box">
+                    <div class="example-icon"><i class="fa-solid fa-users"></i></div>
+                    <div class="example-text">
+                        <strong>Exemplo Prático:</strong> Se 10 clientes compram R$ 100 cada na sua loja, você tem no primeiro momento <strong>10 NSUs gerados</strong>. Ainda não há a moeda eletrónica (dinheiro real) repassada.
+                    </div>
+                </div>
+
+                <!-- Banner de Alerta a Fechar a Fase 1 -->
+                <div class="alert-banner">
+                    <div class="alert-icon"><i class="fa-solid fa-triangle-exclamation"></i></div>
+                    <div class="alert-text">
+                        ATENÇÃO: O dinheiro ainda não entrou na conta! O que se tem neste momento é apenas o registo da transação a aguardar os próximos passos.
+                    </div>
+                </div>
+
+            </div>
+        </div>
+        <div class="scroll-indicator">
+            Rolar para baixo
+            <i class="fa-solid fa-chevron-down"></i>
+        </div>
+    </section>
+
+    <!-- FASE 2 -->
+    <section id="fase2" class="section">
+        <div class="container">
+            <div>
+                <div class="phase-badge" style="background: #fef3c7; color: var(--warning);">Fase 2</div>
+                <h2>O Registo e o Fisco</h2>
+                <p class="subtitle">A transação deixa de ser apenas um "NSU aprovado" e transforma-se oficialmente num ativo financeiro.</p>
+            </div>
+            
+            <div>
+                <!-- Top Row: Gancho -->
+                <div class="alert-box" style="text-align: center; border-left: none; background: #f8fafc; border: 1px solid #e2e8f0;">
+                    <p style="font-size: 1.05rem; color: #0f172a; line-height: 1.5; margin: 0; font-weight: 600;">
+                        <i class="fa-solid fa-eye" style="margin-right: 8px; color: var(--accent);"></i> As Registradoras e o Fisco estavam de fora. Agora, entram finalmente no jogo!
+                    </p>
+                </div>
+
+                <!-- Middle Row: Os Tópicos -->
+                <h3 style="color: var(--primary); font-size: 1.2rem; margin-bottom: 20px; text-align: center; opacity: 0; animation: fadeIn 0.6s ease-out 0.4s forwards;">Os Pilares da Fase 2</h3>
+                
+                <div class="grid-cards" style="grid-template-columns: 1fr 1fr; max-width: 900px; margin-left: auto; margin-right: auto;">
+                    <div class="flow-card">
+                        <div class="flow-icon" style="color: var(--warning);"><i class="fa-solid fa-file-contract"></i></div>
+                        <div class="flow-text">
+                            <h4>1. O Nascimento do Recebível</h4>
+                            <p>A adquirente regista a venda na <strong>CERC, Nuclea ou TAG</strong>. Nasce a UR (Unidade de Recebível) contendo o valor líquido, a data do repasse (D+1, D+30) e o CNPJ do beneficiário.</p>
+                        </div>
+                    </div>
+                    
+                    <div class="flow-card">
+                        <div class="flow-icon" style="color: var(--danger);"><i class="fa-solid fa-satellite-dish"></i></div>
+                        <div class="flow-text">
+                            <h4>2. O Radar do Fisco</h4>
+                            <p>A adquirente envia o ficheiro <strong>DIMP</strong> à SEFAZ.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Exemplo Mercado Livre (Split de Pagamento) -->
+                <div class="split-ml-box">
+                    <h4 style="color: var(--primary); margin-bottom: 20px; display: flex; align-items: center; gap: 10px;">
+                        <i class="fa-solid fa-scissors" style="color: var(--warning);"></i> O Exemplo do Mercado Livre (Split de Pagamento)
+                    </h4>
+                    <div class="content-grid" style="gap: 30px;">
+                        <div>
+                            <p style="font-size: 0.95rem; color: var(--text-main); line-height: 1.5; margin-bottom: 15px;">
+                                Neste modelo, a quebra do dinheiro acontece <strong>apenas nesta Fase 2</strong>. A UR de R$ 1.000,00 é fatiada nas registradoras:
+                            </p>
+                            <div class="split-card" style="border-color: var(--success);">
+                                <div><span style="font-size: 0.8rem; color: #64748b;">Dono do Produto</span><br><strong>Vendedor</strong></div>
+                                <strong>R$ 850,00</strong>
+                            </div>
+                            <div class="split-card" style="border-color: #94a3b8;">
+                                <div><span style="font-size: 0.8rem; color: #64748b;">Frete</span><br><strong>Logística</strong></div>
+                                <strong>R$ 50,00</strong>
+                            </div>
+                            <div class="split-card" style="border-color: #ffe600;">
+                                <div><span style="font-size: 0.8rem; color: #64748b;">Comissão</span><br><strong>Plataforma (ML)</strong></div>
+                                <strong>R$ 100,00</strong>
+                            </div>
+                        </div>
+                        <div style="display: flex; flex-direction: column; justify-content: center;">
+                            <div class="alert-box" style="background: #eff6ff; border-left-color: var(--accent); margin-bottom: 0;">
+                                <h4 style="color: #1e3a8a; margin-bottom: 10px; display: flex; align-items: center; gap: 8px;">
+                                    <i class="fa-solid fa-building-lock"></i> Travas Bancárias e Bloqueios
+                                </h4>
+                                <p style="font-size: 0.9rem; color: #1e40af; line-height: 1.5; margin: 0;">
+                                    Como a UR se tornou um <strong>ativo financeiro oficial</strong> nas registradoras, é exatamente nesta fase que incidem as <strong>Travas Bancárias</strong> (quando as vendas são dadas como garantia de empréstimos) ou eventuais <strong>Bloqueios Judiciais</strong>. O valor é retido ou redirecionado antes mesmo da liquidação.
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+        <div class="scroll-indicator">
+            Rolar para baixo
+            <i class="fa-solid fa-chevron-down"></i>
+        </div>
+    </section>
+
+    <!-- FASE 3 REESTRUTURADA -->
+    <section id="fase3" class="section">
+        <div class="container">
+            <div>
+                <div class="phase-badge" style="background: #dcfce7; color: var(--success);">Fase 3</div>
+                <h2>A Liquidação (Moeda Eletrónica)</h2>
+                <p class="subtitle">A data combinada chegou. Neste momento temos a moeda eletrónica, que é o saldo real na conta, e o Fisco cruza todas as informações.</p>
+            </div>
+            
+            <div class="content-grid">
+                <div>
+                    <div class="flow-box">
+                        <div class="flow-icon" style="color: var(--success);"><i class="fa-solid fa-money-bill-transfer"></i></div>
+                        <div class="flow-text">
+                            <h4>1. A Ordem de Pagamento e Baixa da UR</h4>
+                            <p>A adquirente envia a instrução via CIP/STR ou PIX. A registradora dá a <strong>"baixa" na UR</strong> e, neste exato momento, passamos a ter a <strong>moeda eletrónica</strong> disponível. O status muda de <em>A Receber</em> para <em>Liquidado</em>.</p>
+                        </div>
+                    </div>
+                    <div class="flow-box">
+                        <div class="flow-icon" style="color: var(--primary);"><i class="fa-solid fa-landmark"></i></div>
+                        <div class="flow-text">
+                            <h4>2. O Novo Registo (e-Financeira)</h4>
+                            <p>O Banco envia à Receita Federal a <strong>e-Financeira</strong>, relatando toda a movimentação da conta. A adquirente também detalha os recebimentos através da <strong>DIRF / EFD-Reinf</strong>.</p>
+                        </div>
+                    </div>
+                    <div class="flow-box">
+                        <div class="flow-icon" style="color: var(--warning);"><i class="fa-solid fa-file-invoice-dollar"></i></div>
+                        <div class="flow-text">
+                            <h4>3. As Obrigações e a Conciliação Simplificada</h4>
+                            <p>O Fisco cruza DIMP + e-Financeira + Notas Fiscais. Com o fluxo organizado, a <strong>Conciliação Bancária</strong> torna-se um processo simples e automatizado.</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <div style="display: flex; flex-direction: column; justify-content: center; align-items: center;">
+                    <div style="text-align: center; background: white; padding: 40px; border-radius: 20px; box-shadow: 0 10px 25px rgba(0,0,0,0.05); width: 100%; transition: transform 0.3s; cursor: default;">
+                        <i class="fa-solid fa-circle-check" style="font-size: 4rem; color: var(--success); margin-bottom: 20px;"></i>
+                        <h3 style="color: var(--primary); font-size: 1.5rem;">Ciclo Finalizado</h3>
+                        <p style="color: var(--text-light); margin-top: 10px;">Moeda eletrónica disponível como saldo.<br>As obrigações fiscais foram conciliadas.</p>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+        <div class="scroll-indicator">
+            Rolar para baixo
+            <i class="fa-solid fa-chevron-down"></i>
+        </div>
+    </section>
+
+    <!-- RESUMO -->
+    <section id="resumo" class="section">
+        <div class="container">
+            <div style="text-align: center; margin-bottom: 40px;">
+                <h2>A Fotografia Completa</h2>
+                <p class="subtitle">O caminho de R$ 1.000,00: Da captura ao saldo em conta.</p>
+            </div>
+            
+            <div class="overview-grid">
+                <div class="overview-card" style="border-top: 6px solid var(--accent);">
+                    <div class="flow-icon"><i class="fa-solid fa-calculator"></i></div>
+                    <h3>1. A Captura</h3>
+                    <p>O Banco Emissor autoriza a venda, o limite do cliente é congelado e o <strong>NSU</strong> é gerado.</p>
+                </div>
+                
+                <div class="overview-card" style="border-top: 6px solid var(--warning);">
+                    <div class="flow-icon" style="color: var(--warning);"><i class="fa-solid fa-file-contract"></i></div>
+                    <h3>2. O Registo</h3>
+                    <p>A venda torna-se uma <strong>UR</strong> nas registradoras e a adquirente envia a <strong>DIMP</strong> para a SEFAZ.</p>
+                    <div class="event-tag" style="background: #e2e8f0; color: #475569; margin-top: 15px;">Ativo Financeiro</div>
+                </div>
+
+                <div class="overview-card" style="border-top: 6px solid var(--success);">
+                    <div class="flow-icon" style="color: var(--success);"><i class="fa-solid fa-money-bill-transfer"></i></div>
+                    <h3>3. A Liquidação</h3>
+                    <p>A UR recebe baixa e torna-se <strong>moeda eletrónica</strong> (saldo em conta). Ocorre o cruzamento da <strong>e-Financeira</strong> com a <strong>Nota Fiscal</strong>.</p>
+                </div>
+            </div>
+        </div>
+        <div class="scroll-indicator">
+            A infraestrutura Athos Pay
+            <i class="fa-solid fa-chevron-down"></i>
+        </div>
+    </section>
+
+    <!-- ATHOS PAY: A SOLUÇÃO FUNDAMENTADA EM LEI -->
+    <section id="athos" class="section">
+        <div class="container">
+            <div>
+                <div class="phase-badge" style="background: #e0e7ff; color: var(--athos);">Tecnologia + Segurança Jurídica</div>
+                <h2>A Solução Definitiva Athos Pay</h2>
+                <p class="subtitle">A nossa infraestrutura atua na raiz (Fase 1). Resolvemos na origem o que a contabilidade, no modelo tradicional, tenta consertar no fim do mês.</p>
+            </div>
+            
+            <div class="content-grid" style="align-items: center;">
+                <div>
+                    <h3 style="color: var(--primary); font-size: 1.4rem; margin-bottom: 25px;">A Inteligência do "Split na Captura"</h3>
+                    <p style="font-size: 1rem; color: var(--text-main); line-height: 1.6; margin-bottom: 30px;">
+                        No mercado tradicional, a divisão do fluxo financeiro acontece tarde demais, gerando confusão na DIMP. A <strong>Athos Pay</strong> possui uma infraestrutura que atua no milissegundo da <strong>Fase 1</strong>. Assim que a transação ocorre, o nosso sistema "quebra" o <strong>NSU</strong> na raiz, operando sob a lógica de mandato civil ("Por Conta e Ordem") ou cessão.
+                    </p>
+                    
+                    <div class="alert-box" style="background: #f8fafc; border: 1px solid #e2e8f0; border-left: 5px solid var(--athos); margin-bottom: 0;">
+                        <h4 style="color: var(--athos); margin-bottom: 10px; display: flex; align-items: center; gap: 8px;">
+                            <i class="fa-solid fa-scale-unbalanced"></i> Autonomia Contábil Absoluta
+                        </h4>
+                        <p style="font-size: 0.9rem; color: var(--text-main); line-height: 1.5; margin: 0;">
+                            A DIMP é processada e enviada à SEFAZ diretamente no CNPJ do verdadeiro dono do dinheiro. Na sua DIMP, entram <strong>apenas os valores efetivamente liquidados na sua conta</strong>. O que legitima a exclusão da base de impostos é a titularidade do crédito desde a origem.
+                        </p>
+                    </div>
+                </div>
+
+                <div style="display: flex; flex-direction: column; gap: 15px;">
+                    <!-- Benefício 1: Economia Tributária (Fundamentado) -->
+                    <div class="athos-highlight">
+                        <div class="athos-icon"><i class="fa-solid fa-file-shield"></i></div>
+                        <div>
+                            <span class="legal-badge">CTN Art. 121 | Res. CGSN 140/2018 | EFD-Reinf (R-4010/4020)</span>
+                            <h4 style="color: var(--primary); font-size: 1.1rem; margin-bottom: 5px;">Elisão Fiscal Inquestionável</h4>
+                            <p style="font-size: 0.9rem; color: var(--text-main); line-height: 1.5;">
+                                Apoiados na lei, montantes alheios à sua receita própria não compõem o seu faturamento. Exclua legalmente a parcela de terceiros da base de cálculo de impostos (como no Simples Nacional ou Lucro Presumido), eliminando de vez o risco de bitributação e malha fiscal.
+                            </p>
+                        </div>
+                    </div>
+
+                    <!-- Benefício 2: Livre de Travas (Fundamentado) -->
+                    <div class="athos-highlight">
+                        <div class="athos-icon"><i class="fa-solid fa-lock"></i></div>
+                        <div>
+                            <span class="legal-badge">Res. BCB 150/2021 | Eventos 513 e 514</span>
+                            <h4 style="color: var(--primary); font-size: 1.1rem; margin-bottom: 5px;">Blindagem Patrimonial Total</h4>
+                            <p style="font-size: 0.9rem; color: var(--text-main); line-height: 1.5;">
+                                O Contrato de Repartição (Evento 513) obriga a registradora a criar URs independentes logo na captura. Isto assegura <strong>segregação patrimonial absoluta</strong>: travas bancárias, antecipações ou bloqueios judiciais do seu CNPJ jamais atingirão a moeda eletrónica dos seus parceiros (e vice-versa).
+                            </p>
+                        </div>
+                    </div>
+
+                    <!-- Benefício 3: Conciliação Absoluta (Fundamentado) -->
+                    <div class="athos-highlight">
+                        <div class="athos-icon"><i class="fa-solid fa-magnifying-glass-chart"></i></div>
+                        <div>
+                            <span class="legal-badge">Conv. ICMS 134/16 | Ajuste SINIEF 07/05</span>
+                            <h4 style="color: var(--primary); font-size: 1.1rem; margin-bottom: 5px;">Trilha de Auditoria Automatizada</h4>
+                            <p style="font-size: 0.9rem; color: var(--text-main); line-height: 1.5;">
+                                O cruzamento de dados torna-se exato. A DIMP (SEFAZ), a liquidação na e-Financeira (Banco) e o reporte da EFD-Reinf (Receita Federal) batem ao cêntimo com as suas Notas Fiscais. O ecossistema fiscal da Athos Pay automatiza a conformidade e protege o lojista e o seu contabilista.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="scroll-indicator">
+            Resultados e Simulador
+            <i class="fa-solid fa-chevron-down"></i>
+        </div>
+    </section>
+
+    <!-- IMPACTO FINANCEIRO E SIMULADOR -->
+    <section id="impacto" class="section">
+        <div class="container">
+            <div>
+                <div class="phase-badge" style="background: #e0f2fe; color: #0ea5e9;">Resultados Práticos</div>
+                <h2>O Impacto Financeiro Real</h2>
+                <p class="subtitle">Traduzindo a segurança jurídica em liquidez imediata e economia tributária escalável.</p>
+            </div>
+            
+            <div class="overview-grid" style="margin-bottom: 40px;">
+                <!-- Impacto 1 -->
+                <div class="overview-card" style="border-top: 6px solid var(--success); text-align: left; align-items: flex-start; padding: 30px;">
+                    <div class="flow-icon" style="color: var(--success); margin-bottom: 20px; width: 50px; height: 50px; font-size: 1.2rem;"><i class="fa-solid fa-arrow-trend-down"></i></div>
+                    <h3 style="font-size: 1.3rem; margin-bottom: 15px;">Até 40% de Redução</h3>
+                    <p style="text-align: left; font-size: 0.95rem; color: var(--text-main); line-height: 1.6;">Ao fracionar o recebível na raiz, a sua base de cálculo diminui. Isto evita que a sua empresa salte para faixas com alíquotas efetivas mais elevadas no Simples Nacional.</p>
+                </div>
+                
+                <!-- Impacto 2 -->
+                <div class="overview-card" style="border-top: 6px solid var(--warning); text-align: left; align-items: flex-start; padding: 30px;">
+                    <div class="flow-icon" style="color: var(--warning); margin-bottom: 20px; width: 50px; height: 50px; font-size: 1.2rem;"><i class="fa-solid fa-calendar-check"></i></div>
+                    <h3 style="font-size: 1.3rem; margin-bottom: 15px;">Liquidez Flexível (D+1 a D+28)</h3>
+                    <p style="text-align: left; font-size: 0.95rem; color: var(--text-main); line-height: 1.6;">Tenha total controlo sobre o seu fluxo de caixa. Agende os repasses de forma programada e evite arcar com taxas de antecipação onerosas e desnecessárias.</p>
+                </div>
+
+                <!-- Impacto 3 -->
+                <div class="overview-card" style="border-top: 6px solid var(--athos); text-align: left; align-items: flex-start; padding: 30px;">
+                    <div class="flow-icon" style="color: var(--athos); margin-bottom: 20px; width: 50px; height: 50px; font-size: 1.2rem;"><i class="fa-solid fa-hand-holding-dollar"></i></div>
+                    <h3 style="font-size: 1.3rem; margin-bottom: 15px;">O Fim da Bitributação</h3>
+                    <p style="text-align: left; font-size: 0.95rem; color: var(--text-main); line-height: 1.6;">Faturou 300 mil, mas 100 mil pertencem a parceiros? A tributação incidirá <strong>apenas sobre os seus 200 mil reais</strong>. O lucro fica na sua operação, não no Fisco.</p>
+                </div>
+            </div>
+
+            <!-- Chamada para o Simulador -->
+            <div style="background: linear-gradient(135deg, #1e293b 0%, #0f172a 100%); border-radius: 16px; padding: 40px; color: white; display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 20px; box-shadow: 0 15px 30px rgba(0,0,0,0.15);">
+                <div style="flex: 1; min-width: 300px;">
+                    <h3 style="color: white; font-size: 1.8rem; margin-bottom: 10px; display: flex; align-items: center;"><i class="fa-solid fa-calculator" style="color: var(--success); margin-right: 15px;"></i> Descubra a sua economia</h3>
+                    <p style="color: #cbd5e1; font-size: 1.05rem; line-height: 1.5; margin-bottom: 0;">Utilize o nosso <strong>Simulador Dinâmico</strong> e veja o impacto financeiro exato da Athos Pay no enquadramento da sua empresa (Simples Nacional ou Lucro Presumido).</p>
+                </div>
+                <div>
+                    <button style="background: var(--success); color: white; border: none; padding: 16px 32px; border-radius: 8px; font-size: 1.1rem; font-weight: 800; cursor: pointer; display: flex; align-items: center; gap: 10px; transition: all 0.3s ease; box-shadow: 0 4px 15px rgba(16, 185, 129, 0.4);" onmouseover="this.style.transform='translateY(-3px)'; this.style.boxShadow='0 8px 25px rgba(16, 185, 129, 0.6)';" onmouseout="this.style.transform='translateY(0)'; this.style.boxShadow='0 4px 15px rgba(16, 185, 129, 0.4)';">
+                        Aceder ao Simulador
+                        <i class="fa-solid fa-arrow-right"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <script>
+        const observerOptions = { root: null, rootMargin: '0px', threshold: 0.3 };
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    const container = entry.target.querySelector('.container');
+                    if (container) container.classList.add('visible');
+                    updateNav(entry.target.id);
+                }
+            });
+        }, observerOptions);
+
+        document.querySelectorAll('.section').forEach(section => observer.observe(section));
+
+        function updateNav(currentId) {
+            document.querySelectorAll('.nav-dot').forEach(dot => {
+                dot.classList.remove('active');
+                if (dot.getAttribute('href') === '#' + currentId) dot.classList.add('active');
+            });
+        }
+        
+        window.addEventListener('load', () => {
+            const firstContainer = document.querySelector('#fase1 .container');
+            if (firstContainer) firstContainer.classList.add('visible');
+        });
+    </script>
+</body>
+</html>
