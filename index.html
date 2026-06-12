@@ -26,7 +26,7 @@
             background-color: var(--bg-color);
             color: var(--text-main);
             overflow-x: hidden;
-            padding-top: 60px; /* Espaço para o cabeçalho fixo */
+            padding-top: 80px; /* Espaço para o cabeçalho fixo atualizado */
         }
 
         /* Cabeçalho Fixo */
@@ -38,17 +38,48 @@
             background-color: #0f172a; /* Azul escuro */
             color: #ffffff;
             text-align: center;
-            padding: 20px 20px;
+            padding: 15px 20px;
+            z-index: 1000;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            gap: 5px;
+            transition: all 0.3s ease;
+        }
+
+        .header-title {
             font-size: 1.2rem;
             font-weight: 800;
             letter-spacing: 2px;
-            z-index: 1000;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
             text-transform: uppercase;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            gap: 10px;
+            transition: max-height 0.3s ease, opacity 0.3s ease, margin 0.3s ease;
+            max-height: 50px;
+            opacity: 1;
+            overflow: hidden;
+        }
+
+        .header-fixed.hide-main-title .header-title {
+            max-height: 0;
+            opacity: 0;
+            margin: 0;
+        }
+
+        #header-text {
+            font-size: 0.85rem;
+            color: #38bdf8; /* Azul destaque para o subtítulo */
+            font-weight: 700;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+            transition: all 0.3s ease;
+        }
+
+        .header-fixed.hide-main-title #header-text {
+            font-size: 1.2rem;
+            color: #ffffff;
+            font-weight: 800;
+            letter-spacing: 2px;
         }
 
         /* Menu de Navegação Lateral */
@@ -101,7 +132,7 @@
 
         /* Seções de Conteúdo (Rolagem) */
         .section {
-            min-height: calc(100vh - 60px);
+            min-height: calc(100vh - 80px);
             padding: 60px 20px;
             display: flex;
             justify-content: center;
@@ -305,10 +336,6 @@
         /* Blocos Especiais Adicionais */
         .ciclo-box { text-align: center; background: white; padding: 40px; border-radius: 20px; box-shadow: 0 10px 25px rgba(0,0,0,0.05); width: 100%; transition: transform 0.3s; cursor: default; }
         
-        .simulador-banner { background: linear-gradient(135deg, #1e293b 0%, #0f172a 100%); border-radius: 16px; padding: 40px; color: white; display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 20px; box-shadow: 0 15px 30px rgba(0,0,0,0.15); }
-        .simulador-btn { background: var(--success); color: white; border: none; padding: 16px 32px; border-radius: 8px; font-size: 1.1rem; font-weight: 800; cursor: pointer; display: flex; align-items: center; gap: 10px; transition: all 0.3s ease; box-shadow: 0 4px 15px rgba(16, 185, 129, 0.4); text-decoration: none; justify-content: center; }
-        .simulador-btn:hover { transform: translateY(-3px); box-shadow: 0 8px 25px rgba(16, 185, 129, 0.6); }
-
         /* Instrução de Rolagem */
         .scroll-indicator { position: absolute; bottom: 30px; left: 50%; transform: translateX(-50%); display: flex; flex-direction: column; align-items: center; color: var(--text-light); font-size: 0.9rem; font-weight: 600; animation: bounce 2s infinite; text-align: center; }
         .scroll-indicator i { font-size: 1.5rem; margin-top: 5px; }
@@ -325,8 +352,6 @@
             .container { padding: 30px; }
             .side-nav { display: none; }
             h2 { font-size: 1.8rem; }
-            .simulador-banner { flex-direction: column; text-align: center; }
-            .simulador-banner > div { width: 100%; display: flex; justify-content: center; flex-direction: column; align-items: center; }
         }
 
         /* 📱 RESPONSIVIDADE - SMARTPHONES */
@@ -344,8 +369,6 @@
             .split-ml-box { padding: 20px 15px; }
             .overview-card { padding: 20px 15px; }
             .ciclo-box { padding: 25px 15px; }
-            .simulador-banner { padding: 25px 15px; }
-            .simulador-btn { width: 100%; justify-content: center; font-size: 1rem; }
             .grid-cards { gap: 15px; }
             
             .scroll-indicator { bottom: 15px; }
@@ -356,13 +379,14 @@
 <body>
 
     <header class="header-fixed">
-        <i class="fa-solid fa-arrows-spin"></i> FLUXO TRANSACIONAL
+        <div class="header-title"><i class="fa-solid fa-arrows-spin"></i> FLUXO TRANSACIONAL</div>
+        <div id="header-text">Fase 1. Captura</div>
     </header>
 
     <nav class="side-nav">
-        <a href="#fase1" class="nav-dot active" data-label="1. Captura"></a>
-        <a href="#fase2" class="nav-dot" data-label="2. Registro e Recebível"></a>
-        <a href="#fase3" class="nav-dot" data-label="3. Liquidação"></a>
+        <a href="#fase1" class="nav-dot active" data-label="Fase 1. Captura"></a>
+        <a href="#fase2" class="nav-dot" data-label="Fase 2. Registro e Recebível"></a>
+        <a href="#fase3" class="nav-dot" data-label="Fase 3. Liquidação"></a>
         <a href="#fotografia" class="nav-dot" data-label="A Fotografia Completa"></a>
         <a href="#athos" class="nav-dot" data-label="A Solução Athos Pay"></a>
         <a href="#impacto" class="nav-dot" data-label="O Impacto Financeiro"></a>
@@ -624,7 +648,7 @@
             <div>
                 <div class="phase-badge" style="background: #e0e7ff; color: var(--athos);">Tecnologia + Segurança Jurídica</div>
                 <h2>A Solução Definitiva Athos Pay</h2>
-                <p class="subtitle">Nossa infraestrutura atua na raiz (Fase 1). Entregamos o fluxo financeiro 100% conciliado na origem, proporcionando total segurança jurídica e eficiência para o trabalho da sua contabilidade.</p>
+                <p class="subtitle">Nossa infraestrutura atua na raiz (Fase 1). Automatizamos o compliance na origem, garantindo que a sua contabilidade receba dados perfeitamente conciliados, com total transparência e segurança jurídica.</p>
             </div>
             
             <div class="content-grid" style="align-items: center;">
@@ -695,7 +719,7 @@
                 <p class="subtitle">Traduzindo a segurança jurídica em liquidez imediata e economia tributária escalável.</p>
             </div>
             
-            <div class="overview-grid" style="margin-bottom: 40px;">
+            <div class="overview-grid">
                 <div class="overview-card" style="border-top: 6px solid var(--success); text-align: left; align-items: flex-start; padding: 30px;">
                     <div class="flow-icon" style="color: var(--success); margin-bottom: 20px; width: 50px; height: 50px; font-size: 1.2rem;"><i class="fa-solid fa-arrow-trend-down"></i></div>
                     <h3 style="font-size: 1.3rem; margin-bottom: 15px;">Até 40% de Redução</h3>
@@ -712,19 +736,6 @@
                     <div class="flow-icon" style="color: var(--athos); margin-bottom: 20px; width: 50px; height: 50px; font-size: 1.2rem;"><i class="fa-solid fa-hand-holding-dollar"></i></div>
                     <h3 style="font-size: 1.3rem; margin-bottom: 15px;">O Fim da Bitributação</h3>
                     <p style="text-align: left; font-size: 0.95rem; color: var(--text-main); line-height: 1.6;">Faturou 300 mil, mas 100 mil pertencem a parceiros? A tributação incidirá <strong>apenas sobre os seus 200 mil reais</strong>. O lucro fica na sua operação, não no Fisco.</p>
-                </div>
-            </div>
-
-            <div class="simulador-banner">
-                <div style="flex: 1; min-width: 300px;">
-                    <h3 style="color: white; font-size: 1.8rem; margin-bottom: 10px; display: flex; align-items: center; justify-content: center;"><i class="fa-solid fa-calculator" style="color: var(--success); margin-right: 15px;"></i> Descubra a sua economia</h3>
-                    <p style="color: #cbd5e1; font-size: 1.05rem; line-height: 1.5; margin-bottom: 0;">Utilize o nosso <strong>Simulador Dinâmico</strong> e veja o impacto financeiro exato da Athos Pay no enquadramento da sua empresa (Simples Nacional ou Lucro Presumido).</p>
-                </div>
-                <div style="width: 100%; display: flex; justify-content: center;">
-                    <a href="#" class="simulador-btn">
-                        Acessar o Simulador
-                        <i class="fa-solid fa-arrow-right"></i>
-                    </a>
                 </div>
             </div>
         </div>
@@ -807,10 +818,33 @@
         document.querySelectorAll('.section').forEach(section => observer.observe(section));
 
         function updateNav(currentId) {
+            let activeLabel = "";
+            
             document.querySelectorAll('.nav-dot').forEach(dot => {
                 dot.classList.remove('active');
-                if (dot.getAttribute('href') === '#' + currentId) dot.classList.add('active');
+                if (dot.getAttribute('href') === '#' + currentId) {
+                    dot.classList.add('active');
+                    activeLabel = dot.getAttribute('data-label');
+                }
             });
+
+            // Oculta "FLUXO TRANSACIONAL" nas seções finais para dar ênfase ao assunto atual
+            const header = document.querySelector('.header-fixed');
+            if (['athos', 'impacto', 'conclusao'].includes(currentId)) {
+                header.classList.add('hide-main-title');
+            } else {
+                header.classList.remove('hide-main-title');
+            }
+
+            // Atualiza o texto do cabeçalho com transição suave
+            const headerText = document.getElementById('header-text');
+            if (headerText && activeLabel) {
+                headerText.style.opacity = 0;
+                setTimeout(() => {
+                    headerText.textContent = activeLabel.toUpperCase();
+                    headerText.style.opacity = 1;
+                }, 200);
+            }
         }
         
         window.addEventListener('load', () => {
