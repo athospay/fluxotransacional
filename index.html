@@ -336,6 +336,9 @@
         /* Blocos Especiais Adicionais */
         .ciclo-box { text-align: center; background: white; padding: 40px; border-radius: 20px; box-shadow: 0 10px 25px rgba(0,0,0,0.05); width: 100%; transition: transform 0.3s; cursor: default; }
         
+        .simulador-btn { background: var(--success); color: white; border: none; padding: 16px 32px; border-radius: 8px; font-size: 1.1rem; font-weight: 800; cursor: pointer; display: flex; align-items: center; gap: 10px; transition: all 0.3s ease; box-shadow: 0 4px 15px rgba(16, 185, 129, 0.4); text-decoration: none; justify-content: center; }
+        .simulador-btn:hover { transform: translateY(-3px); box-shadow: 0 8px 25px rgba(16, 185, 129, 0.6); }
+
         /* Instrução de Rolagem */
         .scroll-indicator { position: absolute; bottom: 30px; left: 50%; transform: translateX(-50%); display: flex; flex-direction: column; align-items: center; color: var(--text-light); font-size: 0.9rem; font-weight: 600; animation: bounce 2s infinite; text-align: center; }
         .scroll-indicator i { font-size: 1.5rem; margin-top: 5px; }
@@ -369,6 +372,7 @@
             .split-ml-box { padding: 20px 15px; }
             .overview-card { padding: 20px 15px; }
             .ciclo-box { padding: 25px 15px; }
+            .simulador-btn { width: 100%; justify-content: center; font-size: 1rem; }
             .grid-cards { gap: 15px; }
             
             .scroll-indicator { bottom: 15px; }
@@ -522,7 +526,7 @@
                     <div class="content-grid" style="gap: 30px;">
                         <div>
                             <p style="font-size: 0.95rem; color: var(--text-main); line-height: 1.5; margin-bottom: 15px;">
-                                Neste modelo, a quebra do dinheiro acontece <strong>apenas nesta Fase 2</strong>. A UR de R$ 1.000,00 é fatiada nas registradoras:
+                                Neste modelo, a quebra do valor acontece <strong>apenas nesta Fase 2</strong>. A UR de R$ 1.000,00 é fatiada nas registradoras:
                             </p>
                             <div class="split-card" style="border-color: var(--success);">
                                 <div><span style="font-size: 0.8rem; color: #64748b;">Dono do Produto</span><br><strong>Vendedor</strong></div>
@@ -580,7 +584,7 @@
                         <div class="flow-icon" style="color: var(--primary);"><i class="fa-solid fa-landmark"></i></div>
                         <div class="flow-text">
                             <h4>2. O Novo Registro (e-Financeira)</h4>
-                            <p>O Banco envia à Receita Federal a <strong>e-Financeira</strong>, relatando toda a movimentação da conta. A adquirente também detalha os recebimentos através da <strong>DIRF / EFD-Reinf</strong>.</p>
+                            <p>O Banco envia à Receita Federal a <strong>e-Financeira</strong>, relatando toda a movimentação da conta do que foi liquidado. A adquirente também detalha os recebimentos através da <strong>DIRF / EFD-Reinf</strong>.</p>
                         </div>
                     </div>
                     <div class="flow-box">
@@ -655,7 +659,7 @@
                 <div>
                     <h3 style="color: var(--primary); font-size: 1.4rem; margin-bottom: 25px;">A Inteligência do "Split de Recebíveis"</h3>
                     <p style="font-size: 1rem; color: var(--text-main); line-height: 1.6; margin-bottom: 30px;">
-                        No mercado tradicional, a divisão do fluxo financeiro acontece tarde demais, gerando confusão na DIMP. A <strong>Athos Pay</strong> possui uma infraestrutura que atua no milissegundo da <strong>Fase 1</strong>. Assim que a transação ocorre, o nosso sistema "quebra" o <strong>NSU</strong> na raiz, operando sob a lógica de mandato civil ("Por Conta e Ordem") ou cessão.
+                        No mercado tradicional, a divisão do fluxo financeiro acontece tarde demais, gerando confusão na DIMP. A <strong>Athos Pay</strong> possui uma infraestrutura que atua no milissegundo da <strong>Fase 1</strong>. Assim que a transação ocorre, o nosso sistema fraciona o <strong>NSU</strong> na raiz, operando sob a lógica de mandato civil ("Por Conta e Ordem") ou cessão.
                     </p>
                     
                     <div class="alert-box" style="background: #f8fafc; border: 1px solid #e2e8f0; border-left: 5px solid var(--athos); margin-bottom: 0;">
@@ -697,7 +701,7 @@
                             <span class="legal-badge">Conv. ICMS 134/16 | Ajuste SINIEF 07/05</span>
                             <h4 style="color: var(--primary); font-size: 1.1rem; margin-bottom: 5px;">Trilha de Auditoria Automatizada</h4>
                             <p style="font-size: 0.9rem; color: var(--text-main); line-height: 1.5;">
-                                O cruzamento de dados torna-se exato. A DIMP (SEFAZ), a liquidação na e-Financeira (Banco) e o reporte da EFD-Reinf (Receita Federal) batem até o último centavo com as suas Notas Fiscais. O ecossistema fiscal da Athos Pay automatiza a conformidade e protege o lojista e o seu contador.
+                                O cruzamento de dados torna-se exato. A DIMP (SEFAZ), a liquidação na e-Financeira (Banco) e o reporte da EFD-Reinf (Receita Federal) batem até o último centavo com as suas Notas Fiscais. O ecossistema orienta o correto preenchimento nas <strong>Informações Complementares (infCpl)</strong> da Nota Fiscal, garantindo o lastro documental perfeito.
                             </p>
                         </div>
                     </div>
@@ -705,12 +709,12 @@
             </div>
         </div>
         <div class="scroll-indicator">
-            Resultados e Simulador
+            Resultados Financeiros
             <i class="fa-solid fa-chevron-down"></i>
         </div>
     </section>
 
-    <!-- IMPACTO FINANCEIRO E SIMULADOR -->
+    <!-- IMPACTO FINANCEIRO -->
     <section id="impacto" class="section">
         <div class="container">
             <div>
@@ -745,7 +749,7 @@
         </div>
     </section>
 
-    <!-- CONCLUSÃO / COMPARATIVA -->
+    <!-- CONCLUSÃO / COMPARATIVA E CTA -->
     <section id="conclusao" class="section">
         <div class="container">
             <div style="text-align: center; margin-bottom: 40px;">
@@ -762,7 +766,7 @@
                     <div style="margin-top: 10px; display: flex; flex-direction: column; gap: 25px;">
                         <div>
                             <h4 style="color: #991b1b; font-size: 1.2rem; display: flex; align-items: center; gap: 10px;"><i class="fa-solid fa-1" style="background: #fca5a5; padding: 5px 10px; border-radius: 8px; color: #7f1d1d;"></i> Captura</h4>
-                            <p style="font-size: 0.95rem; color: #7f1d1d; margin-top: 8px; line-height: 1.5;">Geração de um <strong>NSU único</strong> para todo o valor. O limite é bloqueado sem qualquer divisão de titularidade.</p>
+                            <p style="font-size: 0.95rem; color: #7f1d1d; margin-top: 8px; line-height: 1.5;">Cada venda gera um <strong>NSU vinculado 100% ao lojista principal</strong>. O limite é bloqueado sem qualquer divisão de titularidade na origem.</p>
                         </div>
                         <div style="height: 1px; background: #fca5a5;"></div>
                         <div>
@@ -784,7 +788,7 @@
                     <div style="margin-top: 10px; display: flex; flex-direction: column; gap: 25px;">
                         <div>
                             <h4 style="color: #3730a3; font-size: 1.2rem; display: flex; align-items: center; gap: 10px;"><i class="fa-solid fa-1" style="background: #c7d2fe; padding: 5px 10px; border-radius: 8px; color: #312e81;"></i> Captura</h4>
-                            <p style="font-size: 0.95rem; color: #312e81; margin-top: 8px; line-height: 1.5;"><strong>Split de Recebíveis na raiz.</strong> O sistema intercepta e divide o NSU no exato momento da transação.</p>
+                            <p style="font-size: 0.95rem; color: #312e81; margin-top: 8px; line-height: 1.5;"><strong>Split de Recebíveis na raiz.</strong> O sistema intercepta e fraciona o NSU.</p>
                         </div>
                         <div style="height: 1px; background: #c7d2fe;"></div>
                         <div>
@@ -800,6 +804,16 @@
                 </div>
 
             </div>
+
+            <!-- Chamada Final para Ação (CTA) -->
+            <div style="margin-top: 60px; text-align: center; background: var(--bg-color); border: 1px solid #e2e8f0; border-radius: 16px; padding: 40px; box-shadow: 0 10px 20px rgba(0,0,0,0.02);">
+                <h3 style="color: var(--primary); font-size: 1.6rem; margin-bottom: 25px;">Pronto para otimizar os seus recebíveis?</h3>
+                <a href="#" class="simulador-btn" style="display: inline-flex; width: auto; background: var(--athos); box-shadow: 0 4px 15px rgba(79, 70, 229, 0.4);" onmouseover="this.style.transform='translateY(-3px)'; this.style.boxShadow='0 8px 25px rgba(79, 70, 229, 0.6)';" onmouseout="this.style.transform='translateY(0)'; this.style.boxShadow='0 4px 15px rgba(79, 70, 229, 0.4)';">
+                    Falar com um Especialista
+                    <i class="fa-regular fa-comments"></i>
+                </a>
+            </div>
+
         </div>
     </section>
 
