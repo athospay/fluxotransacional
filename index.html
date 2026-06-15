@@ -369,11 +369,12 @@
 
     <header class="header-fixed">
         <div class="header-title"><i class="fa-solid fa-arrows-spin"></i> FLUXO TRANSACIONAL</div>
-        <div id="header-text">Fase 1. Captura</div>
+        <div id="header-text">Bem-vindo</div>
     </header>
 
     <nav class="side-nav">
-        <a href="#fase1" class="nav-dot active" data-label="Fase 1. Captura"></a>
+        <a href="#intro" class="nav-dot active" data-label="Início"></a>
+        <a href="#fase1" class="nav-dot" data-label="Fase 1. Captura"></a>
         <a href="#fase2" class="nav-dot" data-label="Fase 2. Registro e Recebível"></a>
         <a href="#fase3" class="nav-dot" data-label="Fase 3. Liquidação"></a>
         <a href="#fotografia" class="nav-dot" data-label="A Fotografia Completa"></a>
@@ -381,6 +382,31 @@
         <a href="#impacto" class="nav-dot" data-label="O Impacto Financeiro"></a>
         <a href="#conclusao" class="nav-dot" data-label="Comparativo de Mercado"></a>
     </nav>
+    
+    <!-- INTRODUÇÃO (GANCHO) -->
+    <section id="intro" class="section">
+        <div class="container">
+            <div style="text-align: center; max-width: 850px; margin: 0 auto; display: flex; flex-direction: column; align-items: center;">
+                <div class="phase-badge" style="background: #e0e7ff; color: var(--athos); padding: 10px 20px; font-size: 1rem;">Bem-vindo à Athos Pay</div>
+                <h1 style="font-size: 3.2rem; color: var(--primary); margin-bottom: 25px; line-height: 1.2; font-weight: 800;">Otimização Financeira<br><span style="color: var(--athos);">e Tributária</span></h1>
+                
+                <p style="font-size: 1.25rem; color: var(--text-main); line-height: 1.6; margin-bottom: 40px;">
+                    Nós não somos apenas um meio de pagamento. A <strong>Athos Pay</strong> é uma infraestrutura tecnológica projetada para atuar na raiz das suas vendas, entregando <strong>segurança jurídica absoluta</strong> e a eliminação definitiva da bitributação na sua operação.
+                </p>
+                
+                <div class="alert-box" style="background: #f8fafc; border: 1px solid #e2e8f0; border-left: 5px solid var(--accent); text-align: left; width: 100%;">
+                    <p style="margin: 0; font-size: 1.1rem; color: #334155; line-height: 1.6;">
+                        <i class="fa-solid fa-magnifying-glass-chart" style="color: var(--accent); margin-right: 10px; font-size: 1.2rem;"></i>
+                        Mas para entender o poder da nossa tecnologia, precisamos primeiro olhar para o mercado atual. Você sabe exatamente o que acontece nos bastidores quando o seu cliente aprova uma compra? <strong>Vamos acompanhar a jornada dos seus recebíveis.</strong>
+                    </p>
+                </div>
+            </div>
+        </div>
+        <div class="scroll-indicator" onclick="window.location.href='#fase1'" style="cursor:pointer;">
+            Ver o Fluxo Tradicional
+            <i class="fa-solid fa-chevron-down"></i>
+        </div>
+    </section>
 
     <section id="fase1" class="section">
         <div class="container">
@@ -510,7 +536,6 @@
                     </div>
                 </div>
 
-                <!-- Balão de Exemplo Separado -->
                 <div class="example-box" style="background: #f8fafc; border-color: #cbd5e1; margin-bottom: 20px;">
                     <div class="example-icon" style="color: var(--primary);"><i class="fa-solid fa-layer-group"></i></div>
                     <div class="example-text" style="color: var(--text-main); width: 100%;">
@@ -523,7 +548,6 @@
                     </div>
                 </div>
 
-                <!-- Balão de Travas e Bloqueios -->
                 <div class="alert-box" style="background: #eff6ff; border-left-color: var(--accent); margin-bottom: 0;">
                     <h4 style="color: #1e3a8a; margin-bottom: 10px; display: flex; align-items: center; gap: 8px;">
                         <i class="fa-solid fa-building-lock"></i> Travas Bancárias e Bloqueios
@@ -793,7 +817,7 @@
             <!-- Chamada Final para Ação (CTA) -->
             <div style="margin-top: 60px; text-align: center; background: var(--bg-color); border: 1px solid #e2e8f0; border-radius: 16px; padding: 40px; box-shadow: 0 10px 20px rgba(0,0,0,0.02);">
                 <h3 style="color: var(--primary); font-size: 1.6rem; margin-bottom: 25px;">Pronto para otimizar os seus recebíveis?</h3>
-                <a href="#" class="simulador-btn" style="display: inline-flex; width: auto; background: var(--athos); box-shadow: 0 4px 15px rgba(79, 70, 229, 0.4);" onmouseover="this.style.transform='translateY(-3px)'; this.style.boxShadow='0 8px 25px rgba(79, 70, 229, 0.6)';" onmouseout="this.style.transform='translateY(0)'; this.style.boxShadow='0 4px 15px rgba(79, 70, 229, 0.4)';">
+                <a href="https://wa.me/message/SCZQPPLNZPIZP1" class="simulador-btn" style="display: inline-flex; width: auto; background: var(--athos); box-shadow: 0 4px 15px rgba(79, 70, 229, 0.4);" onmouseover="this.style.transform='translateY(-3px)'; this.style.boxShadow='0 8px 25px rgba(79, 70, 229, 0.6)';" onmouseout="this.style.transform='translateY(0)'; this.style.boxShadow='0 4px 15px rgba(79, 70, 229, 0.4)';">
                     Falar com um Especialista
                     <i class="fa-regular fa-comments"></i>
                 </a>
