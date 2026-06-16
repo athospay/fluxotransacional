@@ -150,6 +150,7 @@
 
         /* TIPOGRAFIA BÁSICA E BOTÕES */
         .phase-badge { display: inline-block; background: #e0f2fe; color: var(--accent); padding: 8px 16px; border-radius: 30px; font-weight: 800; font-size: 0.9rem; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 15px; }
+        h1 { font-size: 3.2rem; color: var(--primary); margin-bottom: 20px; line-height: 1.1; font-weight: 800; letter-spacing: -1px; }
         h2 { font-size: 2.2rem; color: var(--primary); margin-bottom: 10px; line-height: 1.2; }
         p.subtitle { font-size: 1.1rem; color: var(--text-light); margin-bottom: 40px; line-height: 1.5; }
 
@@ -328,11 +329,14 @@
         @media (max-width: 1150px) { .cf-flow { flex-wrap: wrap; } }
         
         @media (max-width: 992px) {
-            .hero-grid { grid-template-columns: 1fr; text-align: center; }
+            .hero-grid { grid-template-columns: 1fr; text-align: center; gap: 30px; }
             .hero-grid > div:first-child { display: flex; flex-direction: column; align-items: center; }
             .content-grid, .grid-top, .grid-cards, .overview-grid, .comparison-grid { grid-template-columns: 1fr; }
-            .container { padding: 30px; }
+            .container { padding: 40px 30px; }
             .side-nav { display: none; }
+            
+            /* Ajuste de Títulos base */
+            h1 { font-size: 2.5rem; }
             h2 { font-size: 1.8rem; }
             
             /* Break points Fluxograma Split */
@@ -353,13 +357,21 @@
 
         @media (max-width: 768px) {
             .section { padding: 40px 15px; }
-            .container { padding: 25px 15px; }
-            h2 { font-size: 1.5rem; }
+            .container { padding: 30px 15px; }
+            
+            /* Redução drástica de tipografia para mobile pequeno */
+            h1 { font-size: 2rem !important; }
+            h2 { font-size: 1.6rem !important; }
             p.subtitle { font-size: 1rem; margin-bottom: 25px; }
+            .cf-title { font-size: 1.8rem; margin-bottom: 25px; }
+            
+            /* Elementos Otimizados */
+            .mockup-terminal { width: 100%; max-width: 280px; }
+            .alert-box p, .alert-text { text-align: left; }
             
             .tax-bar { flex-direction: column; height: auto; }
             .tax-left, .tax-right { width: 100%; padding: 25px 15px; }
-            .tax-bracket-label { font-size: 0.85rem; padding: 0 10px; width: 90%; }
+            .tax-bracket-label { font-size: 0.85rem; padding: 0 10px; width: 90%; white-space: normal; text-align: center; }
             .escape-arrow { display: none; }
             
             .flow-box { flex-direction: column; align-items: center; text-align: center; gap: 15px; }
@@ -372,14 +384,25 @@
             .simulador-btn { width: 100%; justify-content: center; font-size: 1rem; }
             .grid-cards { gap: 15px; }
             
+            /* Ajustes Finos Fluxograma */
             .cf-branch { flex-direction: column; }
             .cf-step-row { width: 100%; justify-content: center; }
             .cf-arrow-wrapper { flex-direction: column; }
             .cf-arrow-wrapper .arrow-icon { transform: rotate(90deg); }
-            .cf-step, .cf-step.bg-green { width: 100%; max-width: 300px; }
+            .cf-step, .cf-step.bg-green { width: 100%; max-width: 100%; }
+            .cf-info-card { width: 100%; }
             
-            .sim-eco-block h4 { font-size: 2.5rem; }
-            .quote-banner h3 { font-size: 2rem; }
+            /* Ajustes Finos Simulação Matemática */
+            .sim-header { flex-direction: column; gap: 10px; border-radius: 16px; text-align: center; align-items: center; }
+            .sim-header span { justify-content: center; }
+            .sim-header span:not(:last-child)::after { display: none; } /* Oculta as divisórias verticais | */
+            .sim-res-box { min-width: 100%; text-align: center; }
+            .sim-data-block h4 { font-size: 1.6rem !important; }
+            .sim-eco-block h4 { font-size: 2.2rem; }
+            
+            .comparison-grid > div { padding: 30px 20px !important; }
+            .quote-banner { padding: 30px 20px !important; }
+            .quote-banner h3 { font-size: 1.8rem; }
             
             .scroll-indicator { bottom: 15px; }
             .section { padding-bottom: 60px; }
@@ -411,7 +434,7 @@
             <div class="hero-grid">
                 <div>
                     <div class="phase-badge" style="background: #e0e7ff; color: var(--athos); padding: 8px 16px; font-size: 0.9rem; margin-bottom: 20px;">Bem-vindo à Athos Pay</div>
-                    <h1 style="font-size: 3.2rem; color: var(--primary); margin-bottom: 20px; line-height: 1.1; font-weight: 800; letter-spacing: -1px;">
+                    <h1>
                         Todo valor que entra na sua conta <span style="color: var(--success);">realmente</span> fica com a sua empresa?
                     </h1>
                     
@@ -826,18 +849,15 @@
                             <h4>70% da UR vai para</h4>
                             <p>custos e fornecedores</p>
                         </div>
-                        <!-- Modificação da seta para sair do balão de 30% em direção ao de Menor Base Tributária -->
                         <div class="cf-step-row">
                             <div class="cf-step green">
                                 <h4>30% da UR permanece</h4>
                                 <p>para a empresa</p>
                             </div>
-                            <!-- Seta reposicionada horizontalmente saindo do balão de 30% (Visível no Desktop) -->
                             <i class="fa-solid fa-arrow-right arrow-icon green hide-on-mobile"></i>
                         </div>
                     </div>
 
-                    <!-- Seta vertical (Visível apenas no Mobile para manter a responsividade) -->
                     <i class="fa-solid fa-arrow-down arrow-icon green show-on-mobile"></i>
 
                     <!-- Resultado Final -->
