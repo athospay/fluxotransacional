@@ -4,9 +4,13 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Fluxo Transacional Interativo</title>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
+    
+    <!-- Fontes e Ícones -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800;900&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    
     <style>
+        /* VARIÁVEIS GLOBAIS */
         :root {
             --primary: #1e293b;
             --accent: #3b82f6;
@@ -20,6 +24,7 @@
             --text-light: #64748b;
         }
 
+        /* RESET BÁSICO */
         * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Inter', sans-serif; }
         
         body {
@@ -29,6 +34,7 @@
             padding-top: 80px;
         }
 
+        /* CABEÇALHO (HEADER FIXO) */
         .header-fixed {
             position: fixed;
             top: 0;
@@ -59,28 +65,20 @@
             overflow: hidden;
         }
 
-        .header-fixed.hide-main-title .header-title {
-            max-height: 0;
-            opacity: 0;
-            margin: 0;
-        }
-
+        .header-fixed.hide-main-title .header-title { max-height: 0; opacity: 0; margin: 0; }
+        
         #header-text {
             font-size: 0.85rem;
             color: #38bdf8;
             font-weight: 700;
             letter-spacing: 1px;
             text-transform: uppercase;
-            transition: all 0.3s ease;
+            transition: opacity 0.2s ease, font-size 0.3s ease, color 0.3s ease;
         }
 
-        .header-fixed.hide-main-title #header-text {
-            font-size: 1.2rem;
-            color: #ffffff;
-            font-weight: 800;
-            letter-spacing: 2px;
-        }
+        .header-fixed.hide-main-title #header-text { font-size: 1.2rem; color: #ffffff; font-weight: 800; letter-spacing: 2px; }
 
+        /* NAVEGAÇÃO LATERAL (SIDE NAV) */
         .side-nav {
             position: fixed;
             right: 30px;
@@ -92,21 +90,11 @@
             z-index: 100;
         }
 
-        .nav-dot {
-            width: 12px;
-            height: 12px;
-            border-radius: 50%;
-            background-color: #cbd5e1;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            position: relative;
-            text-decoration: none;
-        }
-
+        .nav-dot { width: 12px; height: 12px; border-radius: 50%; background-color: #cbd5e1; cursor: pointer; transition: all 0.3s ease; position: relative; text-decoration: none; }
         .nav-dot:hover, .nav-dot.active { background-color: var(--accent); transform: scale(1.3); }
         .nav-dot[href="#athos"].active, .nav-dot[href="#athos"]:hover { background-color: var(--athos); }
-        .nav-dot[href="#impacto"].active, .nav-dot[href="#impacto"]:hover { background-color: #0ea5e9; }
-        .nav-dot[href="#fotografia"].active, .nav-dot[href="#fotografia"]:hover { background-color: var(--primary); }
+        .nav-dot[href="#simulacao"].active, .nav-dot[href="#simulacao"]:hover { background-color: #10b981; }
+        .nav-dot[href="#resumo-fluxo"].active, .nav-dot[href="#resumo-fluxo"]:hover { background-color: var(--primary); }
         .nav-dot[href="#conclusao"].active, .nav-dot[href="#conclusao"]:hover { background-color: #475569; }
 
         .nav-dot::after {
@@ -125,9 +113,9 @@
             visibility: hidden;
             transition: all 0.3s ease;
         }
-
         .nav-dot:hover::after { opacity: 1; visibility: visible; }
 
+        /* LAYOUT BASE E CONTAINERS */
         .section {
             min-height: calc(100vh - 80px);
             padding: 60px 20px;
@@ -151,145 +139,87 @@
         }
 
         .container.visible { opacity: 1; transform: translateY(0); }
-
+        
+        /* Cores Dinâmicas das Bordas do Container */
         #fase2 .container { border-top-color: var(--warning); }
         #fase3 .container { border-top-color: var(--success); }
-        #fotografia .container { border-top-color: var(--primary); }
+        #resumo-fluxo .container { border-top-color: var(--primary); }
         #athos .container { border-top-color: var(--athos); }
-        #impacto .container { border-top-color: #0ea5e9; }
+        #simulacao .container { border-top-color: #10b981; }
         #conclusao .container { border-top-color: #475569; }
 
-        .phase-badge {
-            display: inline-block;
-            background: #e0f2fe;
-            color: var(--accent);
-            padding: 8px 16px;
-            border-radius: 30px;
-            font-weight: 800;
-            font-size: 0.9rem;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-            margin-bottom: 15px;
-        }
-
+        /* TIPOGRAFIA BÁSICA E BOTÕES */
+        .phase-badge { display: inline-block; background: #e0f2fe; color: var(--accent); padding: 8px 16px; border-radius: 30px; font-weight: 800; font-size: 0.9rem; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 15px; }
         h2 { font-size: 2.2rem; color: var(--primary); margin-bottom: 10px; line-height: 1.2; }
         p.subtitle { font-size: 1.1rem; color: var(--text-light); margin-bottom: 40px; line-height: 1.5; }
 
-        .flow-box {
-            background: var(--bg-color);
-            border: 1px solid #e2e8f0;
-            border-radius: 12px;
-            padding: 20px;
-            margin-bottom: 15px;
-            display: flex;
-            align-items: flex-start;
-            gap: 20px;
-            opacity: 0;
-            transform: translateX(-30px);
-            transition: all 0.6s ease-out;
+        .simulador-btn { background: var(--success); color: white; border: none; padding: 16px 32px; border-radius: 8px; font-size: 1.1rem; font-weight: 800; cursor: pointer; display: flex; align-items: center; gap: 10px; transition: all 0.3s ease; box-shadow: 0 4px 15px rgba(16, 185, 129, 0.4); text-decoration: none; justify-content: center; }
+        .simulador-btn:hover { transform: translateY(-3px); box-shadow: 0 8px 25px rgba(16, 185, 129, 0.6); }
+
+        .scroll-indicator { position: absolute; bottom: 30px; left: 50%; transform: translateX(-50%); display: flex; flex-direction: column; align-items: center; color: var(--text-light); font-size: 0.9rem; font-weight: 600; animation: bounce 2s infinite; text-align: center; cursor: pointer;}
+        .scroll-indicator i { font-size: 1.5rem; margin-top: 5px; }
+
+        @keyframes bounce {
+            0%, 20%, 50%, 80%, 100% { transform: translateY(0) translateX(-50%); }
+            40% { transform: translateY(-10px) translateX(-50%); }
+            60% { transform: translateY(-5px) translateX(-50%); }
         }
 
+        /* INTRO MOCKUP */
+        .hero-grid { display: grid; grid-template-columns: 1.1fr 0.9fr; gap: 50px; align-items: center; }
+        .mockup-terminal { background: #0f172a; border-radius: 24px; padding: 15px; width: 100%; max-width: 320px; box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.3); border: 2px solid #334155; margin: 0 auto; position: relative; overflow: hidden; }
+        .mockup-terminal::before { content: ''; position: absolute; top: 0; left: 0; width: 100%; height: 70px; background: var(--success); opacity: 0.15; border-radius: 22px 22px 0 0; }
+        .mockup-screen { background: #1e293b; border-radius: 12px; padding: 25px 15px; display: flex; flex-direction: column; gap: 15px; position: relative; z-index: 1; }
+        .mockup-item { background: #ffffff; border-radius: 8px; padding: 12px 15px; display: flex; align-items: center; gap: 12px; box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1); transform: translateX(30px); opacity: 0; transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1); }
+        .container.visible .mockup-item { transform: translateX(0); opacity: 1; }
+        .container.visible .mockup-item:nth-child(1) { transition-delay: 0.3s; }
+        .container.visible .mockup-item:nth-child(2) { transition-delay: 0.5s; }
+        .container.visible .mockup-item:nth-child(3) { transition-delay: 0.7s; }
+        .container.visible .mockup-item:nth-child(4) { transition-delay: 0.9s; }
+        .mockup-text { color: var(--primary); font-size: 0.85rem; font-weight: 700; text-align: left; line-height: 1.3; }
+
+        /* LISTAS, CAIXAS E GRIDS GERAIS */
+        .grid-top { display: grid; grid-template-columns: 1fr 1.2fr; gap: 20px; margin-bottom: 30px; }
+        .grid-cards { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; margin-bottom: 25px; }
+        .content-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 40px; align-items: start; }
+        .overview-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 25px; }
+        .comparison-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 40px; margin-top: 30px; }
+
+        .flow-box { background: var(--bg-color); border: 1px solid #e2e8f0; border-radius: 12px; padding: 20px; margin-bottom: 15px; display: flex; align-items: flex-start; gap: 20px; opacity: 0; transform: translateX(-30px); transition: all 0.6s ease-out; }
         .container.visible .flow-box { opacity: 1; transform: translateX(0); }
         .container.visible .flow-box:nth-child(2) { transition-delay: 0.2s; }
         .container.visible .flow-box:nth-child(3) { transition-delay: 0.4s; }
+        .flow-box:hover { transform: translateX(10px) !important; border-color: var(--accent); box-shadow: 0 10px 20px rgba(0,0,0,0.05); }
 
-        .flow-box:hover {
-            transform: translateX(10px) !important;
-            border-color: var(--accent);
-            box-shadow: 0 10px 20px rgba(0,0,0,0.05);
-        }
-
-        .flow-icon {
-            width: 50px;
-            height: 50px;
-            background: white;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 1.3rem;
-            color: var(--accent);
-            box-shadow: 0 4px 10px rgba(0,0,0,0.05);
-            flex-shrink: 0;
-            transition: transform 0.3s;
-        }
-
+        .flow-icon { width: 50px; height: 50px; background: white; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 1.3rem; color: var(--accent); box-shadow: 0 4px 10px rgba(0,0,0,0.05); flex-shrink: 0; transition: transform 0.3s; }
         .flow-box:hover .flow-icon { transform: scale(1.1) rotate(5deg); }
         .flow-text h4 { font-size: 1.1rem; color: var(--primary); margin-bottom: 5px; }
         .flow-text p { font-size: 0.9rem; color: var(--text-main); line-height: 1.5; }
         .flow-text strong { color: var(--primary); }
 
-        .events-box {
-            background: white;
-            border: 1px solid #e2e8f0;
-            border-radius: 12px;
-            padding: 15px;
-            box-shadow: 0 2px 5px rgba(0,0,0,0.02);
-            opacity: 0;
-            transform: translateY(20px);
-            transition: all 0.6s ease-out 0.2s;
-            text-align: center;
-            height: 100%;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-        }
+        .flow-card { background: var(--bg-color); border: 1px solid #e2e8f0; border-radius: 12px; padding: 20px; display: flex; flex-direction: column; align-items: center; text-align: center; gap: 15px; opacity: 0; transform: translateY(20px); transition: all 0.6s ease-out; }
+        .container.visible .flow-card { opacity: 1; transform: translateY(0); }
+        .container.visible .flow-card:nth-child(1) { transition-delay: 0.5s; }
+        .container.visible .flow-card:nth-child(2) { transition-delay: 0.6s; }
+        .container.visible .flow-card:nth-child(3) { transition-delay: 0.7s; }
+        .flow-card:hover { transform: translateY(-5px) !important; border-color: var(--accent); box-shadow: 0 10px 20px rgba(0,0,0,0.05); }
 
+        .overview-card { background: var(--bg-color); border: 1px solid #e2e8f0; border-radius: 16px; padding: 30px 20px; text-align: center; display: flex; flex-direction: column; align-items: center; opacity: 0; transform: translateY(30px); transition: all 0.6s ease-out; }
+        .container.visible .overview-card { opacity: 1; transform: translateY(0); }
+
+        /* COMPONENTES DE DESTAQUE E ALERTA */
+        .events-box { background: white; border: 1px solid #e2e8f0; border-radius: 12px; padding: 15px; box-shadow: 0 2px 5px rgba(0,0,0,0.02); opacity: 0; transform: translateY(20px); transition: all 0.6s ease-out 0.2s; text-align: center; height: 100%; display: flex; flex-direction: column; justify-content: center; }
         .container.visible .events-box { opacity: 1; transform: translateY(0); }
-
         .events-grid { display: flex; flex-wrap: wrap; gap: 8px; justify-content: center; margin-top: 12px; }
         .event-tag { font-size: 0.75rem; font-weight: 700; padding: 6px 12px; border-radius: 8px; text-transform: uppercase; letter-spacing: 0.5px; }
         .event-tag.success { background: #d1fae5; color: #065f46; border: 1px solid #a7f3d0; }
         .event-tag.warning { background: #fef3c7; color: #92400e; border: 1px solid #fde68a; }
         .event-tag.danger { background: #fee2e2; color: #991b1b; border: 1px solid #fecaca; }
 
-        .circuit-box {
-            background: #f1f5f9;
-            padding: 25px;
-            border-radius: 12px;
-            border: 1px solid #cbd5e1;
-            text-align: center;
-            opacity: 0;
-            transform: translateY(20px);
-            transition: all 0.6s ease-out 0.4s;
-            height: 100%;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-        }
-        
+        .circuit-box { background: #f1f5f9; padding: 25px; border-radius: 12px; border: 1px solid #cbd5e1; text-align: center; opacity: 0; transform: translateY(20px); transition: all 0.6s ease-out 0.4s; height: 100%; display: flex; flex-direction: column; justify-content: center; }
         .container.visible .circuit-box { opacity: 1; transform: translateY(0); }
-
         .circuit-path { display: flex; justify-content: center; align-items: center; gap: 10px; font-weight: 600; color: var(--accent); font-size: 0.85rem; flex-wrap: wrap; margin-top: 15px; }
         .circuit-node { background: white; padding: 8px 12px; border-radius: 8px; box-shadow: 0 2px 4px rgba(0,0,0,0.05); border: 1px solid #e2e8f0; }
-
-        .grid-top { display: grid; grid-template-columns: 1fr 1.2fr; gap: 20px; margin-bottom: 30px; }
-        .grid-cards { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; margin-bottom: 25px; }
-        .content-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 40px; align-items: start; }
-        .comparison-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 40px; margin-top: 30px; }
-        
-        .flow-card {
-            background: var(--bg-color);
-            border: 1px solid #e2e8f0;
-            border-radius: 12px;
-            padding: 20px;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            text-align: center;
-            gap: 15px;
-            opacity: 0;
-            transform: translateY(20px);
-            transition: all 0.6s ease-out;
-        }
-        
-        .container.visible .flow-card { opacity: 1; transform: translateY(0); }
-        .container.visible .flow-card:nth-child(1) { transition-delay: 0.5s; }
-        .container.visible .flow-card:nth-child(2) { transition-delay: 0.6s; }
-        .container.visible .flow-card:nth-child(3) { transition-delay: 0.7s; }
-        
-        .flow-card:hover { transform: translateY(-5px) !important; border-color: var(--accent); box-shadow: 0 10px 20px rgba(0,0,0,0.05); }
-        .flow-card .flow-icon { margin-bottom: 5px; }
 
         .example-box { background: #e0f2fe; border: 1px solid #bae6fd; border-radius: 12px; padding: 20px; display: flex; align-items: center; gap: 15px; opacity: 0; transform: translateY(20px); transition: all 0.6s ease-out 0.8s; }
         .container.visible .example-box { opacity: 1; transform: translateY(0); }
@@ -305,15 +235,9 @@
         .alert-box { background: #e0f2fe; padding: 20px; border-radius: 12px; border-left: 5px solid var(--accent); margin-bottom: 30px; opacity: 0; transform: translateY(20px); transition: all 0.6s ease-out 0.2s; }
         .container.visible .alert-box { opacity: 1; transform: translateY(0); }
 
-        .split-ml-box { background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 12px; padding: 25px; margin-bottom: 25px; opacity: 0; transform: translateY(20px); transition: all 0.6s ease-out 0.6s; }
-        .container.visible .split-ml-box { opacity: 1; transform: translateY(0); }
-        .split-card { background: white; padding: 15px; margin-bottom: 10px; border-radius: 0 8px 8px 0; border-left: 5px solid; box-shadow: 0 2px 8px rgba(0,0,0,0.05); display: flex; justify-content: space-between; align-items: center; transition: transform 0.3s; }
-        .split-card:hover { transform: scale(1.02); }
+        .ciclo-box { text-align: center; background: white; padding: 40px; border-radius: 20px; box-shadow: 0 10px 25px rgba(0,0,0,0.05); width: 100%; transition: transform 0.3s; cursor: default; }
 
-        .overview-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 25px; }
-        .overview-card { background: var(--bg-color); border: 1px solid #e2e8f0; border-radius: 16px; padding: 30px 20px; text-align: center; display: flex; flex-direction: column; align-items: center; opacity: 0; transform: translateY(30px); transition: all 0.6s ease-out; }
-        .container.visible .overview-card { opacity: 1; transform: translateY(0); }
-
+        /* ATHOS PAY E DESTAQUES JURÍDICOS */
         .athos-highlight { background: #eef2ff; border: 1px solid #c7d2fe; border-radius: 16px; padding: 30px; margin-bottom: 20px; display: flex; gap: 20px; align-items: flex-start; opacity: 0; transform: translateX(30px); transition: all 0.6s ease-out; }
         .container.visible .athos-highlight { opacity: 1; transform: translateX(0); }
         .container.visible .athos-highlight:nth-child(2) { transition-delay: 0.2s; }
@@ -322,25 +246,109 @@
         .athos-icon { width: 60px; height: 60px; background: white; border-radius: 12px; display: flex; align-items: center; justify-content: center; font-size: 1.5rem; color: var(--athos); box-shadow: 0 4px 6px rgba(0,0,0,0.05); flex-shrink: 0; }
         .legal-badge { display: inline-block; background: #e0e7ff; color: #4338ca; padding: 2px 8px; border-radius: 4px; font-size: 0.75rem; font-weight: 800; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 8px; border: 1px solid #c7d2fe; }
 
-        .ciclo-box { text-align: center; background: white; padding: 40px; border-radius: 20px; box-shadow: 0 10px 25px rgba(0,0,0,0.05); width: 100%; transition: transform 0.3s; cursor: default; }
+        /* O PROBLEMA INVISÍVEL (BARRAS DE TRIBUTAÇÃO) */
+        .invisible-problem { background: #ffffff; border-radius: 20px; padding: 40px; box-shadow: 0 15px 35px rgba(0,0,0,0.05); border: 1px solid #e2e8f0; margin-top: 40px; opacity: 0; transform: translateY(20px); transition: all 0.6s ease-out; }
+        .container.visible .invisible-problem { opacity: 1; transform: translateY(0); }
+        .tax-bracket { position: relative; border-top: 3px solid var(--danger); border-left: 3px solid var(--danger); border-right: 3px solid var(--danger); border-radius: 8px 8px 0 0; margin-top: 40px; padding-top: 25px; text-align: center; }
+        .tax-bracket-label { position: absolute; top: -15px; left: 50%; transform: translateX(-50%); background: white; padding: 0 20px; font-weight: 800; color: #0f172a; font-size: 1.1rem; white-space: nowrap; }
+        .tax-bar { display: flex; height: 120px; border-radius: 8px; overflow: hidden; margin-top: 10px; position: relative; box-shadow: 0 10px 20px rgba(0,0,0,0.1); }
+        .tax-left { width: 70%; background: #cbd5e1; display: flex; flex-direction: column; justify-content: center; align-items: center; position: relative; padding: 10px; text-align: center; }
+        .tax-right { width: 30%; background: #0f172a; border: 4px solid var(--success); display: flex; flex-direction: column; justify-content: center; align-items: center; color: white; padding: 10px; text-align: center; }
+        .tax-value { font-size: 1.6rem; font-weight: 800; color: #1e293b; z-index: 2; }
+        .tax-right .tax-value { color: white; }
+        .tax-desc { font-size: 0.9rem; color: #475569; margin-top: 5px; font-weight: 600; line-height: 1.2; z-index: 2; max-width: 80%; }
+        .tax-right .tax-desc { color: #cbd5e1; }
+        .escape-arrow { position: absolute; color: #94a3b8; font-size: 2.5rem; opacity: 0.4; }
+        .problem-conclusion { background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 12px; padding: 25px; text-align: center; margin-top: 30px; }
+        .problem-conclusion p { font-size: 1.3rem; color: #0f172a; font-weight: 800; margin-bottom: 5px; }
+        .problem-conclusion span { color: var(--success); font-weight: 800; font-size: 1.1rem; }
+
+        /* COMO FUNCIONA NA PRÁTICA CSS */
+        .como-funciona-wrapper { margin-top: 60px; padding-top: 50px; border-top: 1px solid #e2e8f0; width: 100%; }
+        .cf-title { font-size: 2.2rem; color: var(--primary); margin-bottom: 40px; text-align: center; font-weight: 800; letter-spacing: -1px; }
+        .cf-flow { display: flex; align-items: center; justify-content: center; gap: 15px; flex-wrap: nowrap; width: 100%; }
+        .cf-step { background: white; border: 1px solid #e2e8f0; border-radius: 12px; padding: 25px 20px; box-shadow: 0 10px 20px rgba(0,0,0,0.03); width: 220px; text-align: center; z-index: 2; display: flex; flex-direction: column; align-items: center; justify-content: center; min-height: 160px;}
+        .cf-step.gray { border: 3px solid #94a3b8; min-height: 120px; padding: 15px; }
+        .cf-step.green { border: 3px solid #10b981; min-height: 120px; padding: 15px; }
+        .cf-step.bg-green { background: #dcfce7; border: none; justify-content: center; width: 240px; box-shadow: 0 15px 30px rgba(16,185,129,0.2); }
+        .cf-step.bg-green h4 { color: #166534; font-size: 1.4rem; margin: 0; line-height: 1.4; }
+        .cf-icon { font-size: 2.5rem; color: var(--primary); margin-bottom: 15px; }
+        .cf-step h4 { font-weight: 800; font-size: 1.1rem; margin-bottom: 8px; color: var(--primary); line-height: 1.3; }
+        .cf-step p { font-size: 0.9rem; color: var(--text-light); line-height: 1.4; margin: 0; }
+        .cf-branch { display: flex; flex-direction: column; gap: 15px; }
+        .cf-arrow-wrapper { display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 60px; }
+        .arrow-icon { font-size: 2rem; color: var(--primary); }
+        .arrow-icon.green { color: #10b981; }
+        .arrow-icon.gray { color: #94a3b8; }
         
-        .simulador-btn { background: var(--success); color: white; border: none; padding: 16px 32px; border-radius: 8px; font-size: 1.1rem; font-weight: 800; cursor: pointer; display: flex; align-items: center; gap: 10px; transition: all 0.3s ease; box-shadow: 0 4px 15px rgba(16, 185, 129, 0.4); text-decoration: none; justify-content: center; }
-        .simulador-btn:hover { transform: translateY(-3px); box-shadow: 0 8px 25px rgba(16, 185, 129, 0.6); }
+        /* Ajustes Estruturais para Seta Direcionada (Desktop) */
+        .cf-step-row { display: flex; align-items: center; gap: 15px; }
+        .hide-on-mobile { display: block; }
+        .show-on-mobile { display: none !important; }
 
-        .scroll-indicator { position: absolute; bottom: 30px; left: 50%; transform: translateX(-50%); display: flex; flex-direction: column; align-items: center; color: var(--text-light); font-size: 0.9rem; font-weight: 600; animation: bounce 2s infinite; text-align: center; }
-        .scroll-indicator i { font-size: 1.5rem; margin-top: 5px; }
+        .cf-info-cards { display: flex; gap: 20px; margin-top: 40px; flex-wrap: wrap; justify-content: center; }
+        .cf-info-card { background: var(--bg-color); border: 1px solid #e2e8f0; padding: 20px; border-radius: 12px; max-width: 450px; text-align: left; }
 
-        @keyframes bounce {
-            0%, 20%, 50%, 80%, 100% { transform: translateY(0) translateX(-50%); }
-            40% { transform: translateY(-10px) translateX(-50%); }
-            60% { transform: translateY(-5px) translateX(-50%); }
-        }
+        /* MÓDULO DE SIMULAÇÃO VISUAL (100k) */
+        .sim-header { background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 30px; padding: 10px 20px; display: inline-flex; justify-content: center; gap: 15px; flex-wrap: wrap; margin-bottom: 40px; }
+        .sim-header span { font-size: 0.9rem; color: #0f172a; font-weight: 600; display: flex; align-items: center; }
+        .sim-header span:not(:last-child)::after { content: '|'; color: #cbd5e1; margin-left: 15px; font-weight: 400;}
+        .sim-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 30px; margin-bottom: 30px; }
+        .sim-card { background: #f1f5f9; border-radius: 16px; padding: 20px; position: relative; border: 4px solid; }
+        .sim-card.tradicional { border-color: #94a3b8; }
+        .sim-card.split { border-color: #22c55e; background: #f0fdf4; }
+        .sim-card-title { position: absolute; top: -18px; left: 50%; transform: translateX(-50%); background: #0f172a; color: white; padding: 5px 25px; border-radius: 8px; font-weight: 800; font-size: 1.1rem; white-space: nowrap; }
+        .sim-inner { background: white; border-radius: 12px; padding: 30px 20px; text-align: center; box-shadow: 0 4px 6px rgba(0,0,0,0.02); height: 100%; display: flex; flex-direction: column; justify-content: center; gap: 20px;}
+        .sim-data-block p { font-size: 0.95rem; color: #475569; margin-bottom: 5px; }
+        .sim-data-block h4 { font-size: 2rem; color: #0f172a; font-weight: 900; }
+        .sim-data-block.red h4 { color: #dc2626; border-bottom: 2px solid #dc2626; display: inline-block; padding-bottom: 2px; }
+        .sim-data-block.green h4 { color: #16a34a; }
+        .sim-data-block.gray h4 { color: #334155; }
+        
+        .sim-results { background: white; border: 1px solid #e2e8f0; border-radius: 16px; padding: 30px; box-shadow: 0 10px 25px rgba(0,0,0,0.05); }
+        .sim-results-top { display: flex; justify-content: center; gap: 30px; margin-bottom: 30px; }
+        .sim-res-box { border: 1px solid #cbd5e1; border-radius: 12px; padding: 15px 25px; text-align: left; min-width: 250px; }
+        .sim-res-box.split { border: 2px solid #22c55e; }
+        .sim-res-box p { font-size: 1.05rem; font-weight: 800; color: #0f172a; margin-bottom: 5px; }
+        .sim-res-box span { font-size: 0.9rem; color: #64748b; display: block; margin-bottom: 2px;}
+        .sim-res-box h4 { font-size: 2rem; color: #64748b; font-weight: 900; }
+        .sim-res-box.split h4 { color: #0f172a; }
+        .sim-economy { background: #dcfce7; border: 1px solid #86efac; border-radius: 12px; padding: 25px; display: flex; justify-content: space-around; align-items: center; flex-wrap: wrap; gap: 20px;}
+        .sim-eco-block { text-align: center; }
+        .sim-eco-block p { font-size: 1.2rem; color: #166534; font-weight: 800; margin-bottom: 5px; }
+        .sim-eco-block h4 { font-size: 3.5rem; color: #15803d; font-weight: 900; line-height: 1; }
+        
+        /* BANNER DE CITAÇÃO */
+        .quote-banner { background: white; border: 1px solid #e2e8f0; border-radius: 20px; padding: 50px 40px; text-align: center; margin: 40px auto 0; max-width: 1000px; box-shadow: 0 10px 30px rgba(0,0,0,0.03); }
+        .quote-banner h3 { font-size: 3.5rem; font-weight: 900; line-height: 1.2; margin-bottom: 20px; color: #0f172a; letter-spacing: -1px; }
+        .quote-banner p { font-size: 1.15rem; color: #64748b; max-width: 800px; margin: 0 auto; line-height: 1.6; }
+        .quote-banner .green-line { width: 100%; height: 4px; background: #22c55e; margin: 30px auto; border-radius: 2px; }
 
+        /* RESPONSIVIDADE (MEDIA QUERIES) */
+        @media (max-width: 1150px) { .cf-flow { flex-wrap: wrap; } }
+        
         @media (max-width: 992px) {
+            .hero-grid { grid-template-columns: 1fr; text-align: center; }
+            .hero-grid > div:first-child { display: flex; flex-direction: column; align-items: center; }
             .content-grid, .grid-top, .grid-cards, .overview-grid, .comparison-grid { grid-template-columns: 1fr; }
             .container { padding: 30px; }
             .side-nav { display: none; }
             h2 { font-size: 1.8rem; }
+            
+            /* Break points Fluxograma Split */
+            .cf-flow { flex-direction: column; }
+            .arrow-icon { transform: rotate(90deg); margin: 10px 0; }
+            .cf-arrow-wrapper { gap: 10px; flex-direction: row; }
+            .cf-arrow-wrapper .arrow-icon { transform: rotate(0deg); }
+            .cf-branch { flex-direction: row; flex-wrap: wrap; justify-content: center;}
+            
+            .hide-on-mobile { display: none !important; }
+            .show-on-mobile { display: block !important; }
+            
+            /* Break points Simulação */
+            .sim-grid { grid-template-columns: 1fr; }
+            .sim-results-top { flex-direction: column; align-items: center; gap: 15px;}
+            .quote-banner h3 { font-size: 2.5rem; }
         }
 
         @media (max-width: 768px) {
@@ -349,19 +357,34 @@
             h2 { font-size: 1.5rem; }
             p.subtitle { font-size: 1rem; margin-bottom: 25px; }
             
+            .tax-bar { flex-direction: column; height: auto; }
+            .tax-left, .tax-right { width: 100%; padding: 25px 15px; }
+            .tax-bracket-label { font-size: 0.85rem; padding: 0 10px; width: 90%; }
+            .escape-arrow { display: none; }
+            
             .flow-box { flex-direction: column; align-items: center; text-align: center; gap: 15px; }
             .athos-highlight { flex-direction: column; align-items: center; text-align: center; padding: 20px; gap: 15px; }
             .athos-highlight > div { display: flex; flex-direction: column; align-items: center; }
             
             .example-box, .alert-banner, .alert-box { flex-direction: column; text-align: center; gap: 15px; }
-            .split-ml-box { padding: 20px 15px; }
             .overview-card { padding: 20px 15px; }
             .ciclo-box { padding: 25px 15px; }
             .simulador-btn { width: 100%; justify-content: center; font-size: 1rem; }
             .grid-cards { gap: 15px; }
             
+            .cf-branch { flex-direction: column; }
+            .cf-step-row { width: 100%; justify-content: center; }
+            .cf-arrow-wrapper { flex-direction: column; }
+            .cf-arrow-wrapper .arrow-icon { transform: rotate(90deg); }
+            .cf-step, .cf-step.bg-green { width: 100%; max-width: 300px; }
+            
+            .sim-eco-block h4 { font-size: 2.5rem; }
+            .quote-banner h3 { font-size: 2rem; }
+            
             .scroll-indicator { bottom: 15px; }
             .section { padding-bottom: 60px; }
+            .mockup-item { padding: 10px; }
+            .mockup-text { font-size: 0.75rem; }
         }
     </style>
 </head>
@@ -377,32 +400,60 @@
         <a href="#fase1" class="nav-dot" data-label="Fase 1. Captura"></a>
         <a href="#fase2" class="nav-dot" data-label="Fase 2. Registro e Recebível"></a>
         <a href="#fase3" class="nav-dot" data-label="Fase 3. Liquidação"></a>
-        <a href="#fotografia" class="nav-dot" data-label="A Fotografia Completa"></a>
+        <a href="#resumo-fluxo" class="nav-dot" data-label="Resumo do Fluxo"></a>
         <a href="#athos" class="nav-dot" data-label="A Solução Athos Pay"></a>
-        <a href="#impacto" class="nav-dot" data-label="O Impacto Financeiro"></a>
+        <a href="#simulacao" class="nav-dot" data-label="Simulação Real"></a>
         <a href="#conclusao" class="nav-dot" data-label="Comparativo de Mercado"></a>
     </nav>
-    
-    <!-- INTRODUÇÃO (GANCHO) -->
+
     <section id="intro" class="section">
-        <div class="container">
-            <div style="text-align: center; max-width: 850px; margin: 0 auto; display: flex; flex-direction: column; align-items: center;">
-                <div class="phase-badge" style="background: #e0e7ff; color: var(--athos); padding: 10px 20px; font-size: 1rem;">Bem-vindo à Athos Pay</div>
-                <h1 style="font-size: 3.2rem; color: var(--primary); margin-bottom: 25px; line-height: 1.2; font-weight: 800;">Otimização Financeira<br>e Tributária</h1>
-                
-                <p style="font-size: 1.25rem; color: var(--text-main); line-height: 1.6; margin-bottom: 40px;">
-                    Nós não somos apenas um meio de pagamento. A Athos Pay é uma infraestrutura tecnológica projetada para atuar na raiz das suas vendas, entregando <strong>segurança jurídica</strong>, <strong>eliminando a bitributação</strong> na sua operação e garantindo uma infraestrutura <strong>livre de travas bancárias e bloqueios judiciais</strong>.
-                </p>
-                
-                <div class="alert-box" style="background: #f8fafc; border: 1px solid #e2e8f0; border-left: 5px solid var(--accent); text-align: left; width: 100%;">
-                    <p style="margin: 0; font-size: 1.1rem; color: #334155; line-height: 1.6;">
-                        <i class="fa-solid fa-magnifying-glass-chart" style="color: var(--accent); margin-right: 10px; font-size: 1.2rem;"></i>
-                        Mas para entender o poder da nossa tecnologia, precisamos primeiro olhar para o mercado atual. Você sabe exatamente o que acontece nos bastidores quando o seu cliente aprova uma compra? <strong>Vamos acompanhar a jornada dos seus recebíveis.</strong>
+        <div class="container" style="border-top-color: var(--success);">
+            <div class="hero-grid">
+                <div>
+                    <div class="phase-badge" style="background: #e0e7ff; color: var(--athos); padding: 8px 16px; font-size: 0.9rem; margin-bottom: 20px;">Bem-vindo à Athos Pay</div>
+                    <h1 style="font-size: 3.2rem; color: var(--primary); margin-bottom: 20px; line-height: 1.1; font-weight: 800; letter-spacing: -1px;">
+                        Todo valor que entra na sua conta <span style="color: var(--success);">realmente</span> fica com a sua empresa?
+                    </h1>
+                    
+                    <p style="font-size: 1.15rem; color: var(--text-main); line-height: 1.6; margin-bottom: 30px;">
+                        Nós não somos apenas um meio de pagamento. A Athos Pay é uma infraestrutura tecnológica projetada para atuar na raiz das suas vendas, <strong>eliminando a bitributação</strong> e entregando <strong>segurança jurídica</strong> para a sua operação.
                     </p>
+                    
+                    <div class="alert-box" style="background: #f8fafc; border: 1px solid #e2e8f0; border-left: 5px solid var(--accent); padding: 15px; margin-bottom: 0;">
+                        <p style="margin: 0; font-size: 1rem; color: #334155; line-height: 1.5;">
+                            <i class="fa-solid fa-magnifying-glass-chart" style="color: var(--accent); margin-right: 8px;"></i>
+                            Nossa infraestrutura é livre de travas bancárias e bloqueios judiciais. <strong>Vamos acompanhar a jornada dos seus recebíveis.</strong>
+                        </p>
+                    </div>
+                </div>
+
+                <div style="display: flex; justify-content: center; position: relative;">
+                    <div class="mockup-terminal">
+                        <div style="background: var(--success); height: 50px; border-radius: 8px 8px 0 0; margin-bottom: 0px; opacity: 0.9; box-shadow: inset 0 -5px 15px rgba(0,0,0,0.1);"></div>
+                        <div class="mockup-screen">
+                            <div class="mockup-item">
+                                <i class="fa-solid fa-square-check" style="color: var(--success); font-size: 1.4rem;"></i>
+                                <span class="mockup-text">Rastreabilidade<br>financeira</span>
+                            </div>
+                            <div class="mockup-item">
+                                <i class="fa-solid fa-square-check" style="color: var(--success); font-size: 1.4rem;"></i>
+                                <span class="mockup-text">Split de<br>Recebíveis</span>
+                            </div>
+                            <div class="mockup-item">
+                                <i class="fa-solid fa-square-check" style="color: var(--success); font-size: 1.4rem;"></i>
+                                <span class="mockup-text">Conformidade<br>fiscal</span>
+                            </div>
+                            <div class="mockup-item">
+                                <i class="fa-solid fa-square-check" style="color: var(--success); font-size: 1.4rem;"></i>
+                                <span class="mockup-text">Governança dos<br>recebíveis</span>
+                            </div>
+                        </div>
+                        <div style="height: 15px; width: 60px; background: #334155; border-radius: 10px; margin: 15px auto 0 auto;"></div>
+                    </div>
                 </div>
             </div>
         </div>
-        <div class="scroll-indicator" onclick="window.location.href='#fase1'" style="cursor:pointer;">
+        <div class="scroll-indicator" onclick="window.location.href='#fase1'">
             Ver o Fluxo Tradicional
             <i class="fa-solid fa-chevron-down"></i>
         </div>
@@ -487,7 +538,7 @@
 
             </div>
         </div>
-        <div class="scroll-indicator">
+        <div class="scroll-indicator" onclick="window.location.href='#fase2'">
             Rolar para baixo
             <i class="fa-solid fa-chevron-down"></i>
         </div>
@@ -559,7 +610,7 @@
 
             </div>
         </div>
-        <div class="scroll-indicator">
+        <div class="scroll-indicator" onclick="window.location.href='#fase3'">
             Rolar para baixo
             <i class="fa-solid fa-chevron-down"></i>
         </div>
@@ -607,7 +658,6 @@
                 </div>
             </div>
 
-            <!-- Desfecho do Exemplo na Fase 3 -->
             <div class="alert-banner" style="background: #fffbeb; border-color: #fde68a; border-left-color: var(--warning); margin-top: 40px;">
                 <div class="alert-icon" style="color: var(--warning); font-size: 2.5rem;"><i class="fa-solid fa-flag-checkered"></i></div>
                 <div class="alert-text" style="color: #92400e; font-weight: 400; font-size: 1rem;">
@@ -617,17 +667,16 @@
             </div>
 
         </div>
-        <div class="scroll-indicator">
-            A Fotografia Completa
+        <div class="scroll-indicator" onclick="window.location.href='#resumo-fluxo'">
+            Resumo do Fluxo
             <i class="fa-solid fa-chevron-down"></i>
         </div>
     </section>
 
-    <!-- FOTOGRAFIA COMPLETA (3 CARDS) -->
-    <section id="fotografia" class="section">
+    <section id="resumo-fluxo" class="section">
         <div class="container">
             <div style="text-align: center; margin-bottom: 40px;">
-                <h2>A Fotografia Completa</h2>
+                <h2>Resumo do Fluxo Transacional</h2>
             </div>
             
             <div class="overview-grid">
@@ -650,8 +699,36 @@
                     <p>A UR recebe baixa e torna-se <strong>moeda eletrônica</strong> (saldo em conta). Ocorre o cruzamento da <strong>e-Financeira</strong> com a <strong>Nota Fiscal</strong>.</p>
                 </div>
             </div>
+
+            <div class="invisible-problem">
+                <h3 style="text-align:center; font-size: 2rem; color: var(--primary); margin-bottom: 10px;">O problema invisível do seu faturamento.</h3>
+                
+                <div class="tax-bracket">
+                    <div class="tax-bracket-label">A base do seu imposto atual (R$ 100.000)</div>
+                    <div class="tax-bar">
+                        <div class="tax-left">
+                            <i class="fa-solid fa-arrow-turn-up escape-arrow" style="top: 10px; left: 15%; transform: rotate(-20deg);"></i>
+                            <i class="fa-solid fa-arrow-turn-up escape-arrow" style="top: -10px; left: 45%;"></i>
+                            <i class="fa-solid fa-arrow-turn-up escape-arrow" style="top: 10px; right: 15%; transform: rotate(20deg);"></i>
+                            
+                            <div class="tax-value">R$ 70.000</div>
+                            <div class="tax-desc">(Sai imediatamente para fornecedores e despesas)</div>
+                        </div>
+                        <div class="tax-right">
+                            <div class="tax-value">R$ 30.000</div>
+                            <div class="tax-desc">(O que realmente permanece na empresa)</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="problem-conclusion">
+                    <p>Resultado: Você paga imposto sobre dinheiro que nunca virou lucro.</p>
+                    <span>O problema não é quanto entra. É como sai.</span>
+                </div>
+            </div>
+
         </div>
-        <div class="scroll-indicator">
+        <div class="scroll-indicator" onclick="window.location.href='#athos'">
             A infraestrutura Athos Pay
             <i class="fa-solid fa-chevron-down"></i>
         </div>
@@ -717,48 +794,170 @@
                     </div>
                 </div>
             </div>
-        </div>
-        <div class="scroll-indicator">
-            Resultados Financeiros
-            <i class="fa-solid fa-chevron-down"></i>
-        </div>
-    </section>
 
-    <section id="impacto" class="section">
-        <div class="container">
-            <div>
-                <div class="phase-badge" style="background: #e0f2fe; color: #0ea5e9;">Resultados Práticos</div>
-                <h2>O Impacto Financeiro Real</h2>
-                <p class="subtitle">Traduzindo a segurança jurídica em liquidez imediata e economia tributária escalável.</p>
-            </div>
-            
-            <div class="overview-grid">
-                <div class="overview-card" style="border-top: 6px solid var(--success); text-align: left; align-items: flex-start; padding: 30px;">
-                    <div class="flow-icon" style="color: var(--success); margin-bottom: 20px; width: 50px; height: 50px; font-size: 1.2rem;"><i class="fa-solid fa-arrow-trend-down"></i></div>
-                    <h3 style="font-size: 1.3rem; margin-bottom: 15px;">Até 40% de Redução</h3>
-                    <p style="text-align: left; font-size: 0.95rem; color: var(--text-main); line-height: 1.6;">Ao fracionar o recebível na raiz, a sua base de cálculo diminui. Isto evita que a sua empresa salte para faixas com alíquotas efetivas mais elevadas no Simples Nacional.</p>
-                </div>
+            <div class="como-funciona-wrapper">
+                <h3 class="cf-title">Como funciona na prática.</h3>
                 
-                <div class="overview-card" style="border-top: 6px solid var(--warning); text-align: left; align-items: flex-start; padding: 30px;">
-                    <div class="flow-icon" style="color: var(--warning); margin-bottom: 20px; width: 50px; height: 50px; font-size: 1.2rem;"><i class="fa-solid fa-calendar-check"></i></div>
-                    <h3 style="font-size: 1.3rem; margin-bottom: 15px;">Liquidez Flexível (D+1 a D+28)</h3>
-                    <p style="text-align: left; font-size: 0.95rem; color: var(--text-main); line-height: 1.6;">Tenha total controle sobre o seu fluxo de caixa. Agende os repasses de forma programada e evite arcar com taxas de antecipação onerosas e desnecessárias.</p>
+                <div class="cf-flow">
+                    <!-- Passo 1 -->
+                    <div class="cf-step">
+                        <i class="fa-solid fa-credit-card cf-icon"></i>
+                        <h4>Cliente compra</h4>
+                        <p>Pagamento aprovado</p>
+                    </div>
+
+                    <i class="fa-solid fa-arrow-right arrow-icon"></i>
+
+                    <!-- Passo 2 -->
+                    <div class="cf-step">
+                        <i class="fa-solid fa-gears cf-icon"></i>
+                        <h4>Saldo a Splitar</h4>
+                        <p>Liberdade total com Split na fonte</p>
+                    </div>
+
+                    <div class="cf-arrow-wrapper">
+                        <i class="fa-solid fa-arrow-right arrow-icon gray"></i>
+                        <i class="fa-solid fa-arrow-right arrow-icon green"></i>
+                    </div>
+
+                    <!-- Divisão do Fluxo (Branching) -->
+                    <div class="cf-branch">
+                        <div class="cf-step gray">
+                            <h4>70% da UR vai para</h4>
+                            <p>custos e fornecedores</p>
+                        </div>
+                        <!-- Modificação da seta para sair do balão de 30% em direção ao de Menor Base Tributária -->
+                        <div class="cf-step-row">
+                            <div class="cf-step green">
+                                <h4>30% da UR permanece</h4>
+                                <p>para a empresa</p>
+                            </div>
+                            <!-- Seta reposicionada horizontalmente saindo do balão de 30% (Visível no Desktop) -->
+                            <i class="fa-solid fa-arrow-right arrow-icon green hide-on-mobile"></i>
+                        </div>
+                    </div>
+
+                    <!-- Seta vertical (Visível apenas no Mobile para manter a responsividade) -->
+                    <i class="fa-solid fa-arrow-down arrow-icon green show-on-mobile"></i>
+
+                    <!-- Resultado Final -->
+                    <div class="cf-step bg-green">
+                        <h4>Menor base tributária<br>=<br>Maior lucro líquido</h4>
+                    </div>
                 </div>
 
-                <div class="overview-card" style="border-top: 6px solid var(--athos); text-align: left; align-items: flex-start; padding: 30px;">
-                    <div class="flow-icon" style="color: var(--athos); margin-bottom: 20px; width: 50px; height: 50px; font-size: 1.2rem;"><i class="fa-solid fa-hand-holding-dollar"></i></div>
-                    <h3 style="font-size: 1.3rem; margin-bottom: 15px;">O Fim da Bitributação</h3>
-                    <p style="text-align: left; font-size: 0.95rem; color: var(--text-main); line-height: 1.6;">Faturou 300 mil, mas 100 mil pertencem a parceiros? A tributação incidirá <strong>apenas sobre os seus 200 mil reais</strong>. O lucro fica na sua operação, não no Fisco.</p>
+                <div class="cf-info-cards">
+                    <div class="cf-info-card">
+                        <h4 style="color: var(--primary); font-weight: 800; margin-bottom: 5px; font-size: 1.1rem;">O Motor Split de Recebíveis</h4>
+                        <p style="color: var(--text-main); font-size: 0.95rem;">O sistema fraciona e direciona o valor antes de virar problema fiscal.</p>
+                    </div>
+                    <div class="cf-info-card">
+                        <h4 style="color: var(--primary); font-weight: 800; margin-bottom: 5px; font-size: 1.1rem;">Janela de Gestão</h4>
+                        <p style="color: var(--text-main); font-size: 0.95rem;">Organize o fluxo, programe pagamentos e otimize o uso do saldo com total autonomia.</p>
+                    </div>
                 </div>
             </div>
+
         </div>
-        <div class="scroll-indicator">
-            Ver Comparativo
+        <div class="scroll-indicator" onclick="window.location.href='#simulacao'">
+            Ver Simulação Real
             <i class="fa-solid fa-chevron-down"></i>
         </div>
     </section>
 
-    <!-- CONCLUSÃO / COMPARATIVA E CTA -->
+    <section id="simulacao" class="section">
+        <div class="container" style="background: transparent; box-shadow: none; border: none; padding: 20px;">
+            
+            <div style="text-align: center; margin-bottom: 30px;">
+                <h2 style="font-size: 2.8rem; color: #0f172a; font-weight: 900; letter-spacing: -1px;">Simulação Real: A matemática a seu favor.</h2>
+            </div>
+
+            <div class="sim-header">
+                <span>Faturamento Mensal: <strong>R$ 100.000</strong></span>
+                <span>Alíquota Simples Nacional: <strong>12%</strong></span>
+                <span>Destinado a Fornecedores: <strong>70% (R$ 70.000)</strong></span>
+            </div>
+
+            <div class="sim-grid">
+                <!-- Card Sem Split -->
+                <div class="sim-card tradicional">
+                    <div class="sim-card-title">Sem Split</div>
+                    <div class="sim-inner">
+                        <div class="sim-data-block">
+                            <p>Faturamento base para impostos:</p>
+                            <h4>R$ 100.000</h4>
+                        </div>
+                        <div style="height: 1px; background: #e2e8f0; width: 80%; margin: 0 auto;"></div>
+                        <div class="sim-data-block red">
+                            <p>Impostos (12% sobre o total):</p>
+                            <h4>R$ 12.000</h4>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Card Com Split -->
+                <div class="sim-card split">
+                    <div class="sim-card-title" style="background: #10b981;">Com Athos Pay (Split 4.0)</div>
+                    <div class="sim-inner">
+                        <div class="sim-data-block gray">
+                            <p>Valor efetivamente mantido (Base):</p>
+                            <h4>R$ 30.000</h4>
+                        </div>
+                        <div class="sim-data-block green" style="background: #f0fdf4; padding: 15px; border-radius: 8px; border: 1px dashed #86efac; margin: 10px 0;">
+                            <p>Impostos aproximados:</p>
+                            <h4>R$ 2.715</h4>
+                        </div>
+                        <div class="sim-data-block">
+                            <p>Custos operacionais Split:</p>
+                            <h4 style="font-size: 1.5rem;">R$ 3.000</h4>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div style="text-align: center; margin: 50px 0 30px;">
+                <h2 style="font-size: 2.5rem; color: #0f172a; font-weight: 900; letter-spacing: -1px;">O Resultado no Caixa.</h2>
+            </div>
+
+            <div class="sim-results">
+                <div class="sim-results-top">
+                    <div class="sim-res-box">
+                        <p>Sem Split</p>
+                        <span>Resultado líquido:</span>
+                        <h4>R$ 84.424</h4>
+                    </div>
+                    <div class="sim-res-box split">
+                        <p>Com Split 4.0</p>
+                        <span>Resultado líquido:</span>
+                        <h4>R$ 89.910</h4>
+                    </div>
+                </div>
+
+                <div class="sim-economy">
+                    <div class="sim-eco-block">
+                        <p>Economia Mensal:</p>
+                        <h4>R$ 5.486</h4>
+                    </div>
+                    <div class="sim-eco-block">
+                        <p>Economia Anual:</p>
+                        <h4>R$ 65.842</h4>
+                    </div>
+                </div>
+            </div>
+
+            <div class="quote-banner">
+                <h3>“Você não precisa vender mais para lucrar mais.”</h3>
+                <div class="green-line"></div>
+                <p>Você precisa ter inteligência sobre o dinheiro que já passa pela sua empresa. O Split da Athos Pay melhora a eficiência financeira sem exigir um centavo a mais em vendas.</p>
+            </div>
+
+        </div>
+        <div class="scroll-indicator" onclick="window.location.href='#conclusao'">
+            Comparativo Final
+            <i class="fa-solid fa-chevron-down"></i>
+        </div>
+    </section>
+
     <section id="conclusao" class="section">
         <div class="container">
             <div style="text-align: center; margin-bottom: 40px;">
@@ -768,7 +967,6 @@
             
             <div class="comparison-grid">
                 
-                <!-- Fluxo Normal -->
                 <div style="background: #fff1f2; border: 1px solid #fecaca; border-radius: 16px; padding: 40px 30px; position: relative;">
                     <div style="position: absolute; top: -15px; left: 50%; transform: translateX(-50%); background: var(--danger); color: white; padding: 6px 20px; border-radius: 20px; font-weight: 800; font-size: 0.85rem; letter-spacing: 1px;">MERCADO TRADICIONAL</div>
                     
@@ -790,7 +988,6 @@
                     </div>
                 </div>
 
-                <!-- Fluxo Athos Pay -->
                 <div style="background: #eef2ff; border: 1px solid #c7d2fe; border-radius: 16px; padding: 40px 30px; position: relative; box-shadow: 0 10px 30px rgba(79, 70, 229, 0.15);">
                     <div style="position: absolute; top: -15px; left: 50%; transform: translateX(-50%); background: var(--athos); color: white; padding: 6px 20px; border-radius: 20px; font-weight: 800; font-size: 0.85rem; letter-spacing: 1px;">COM ATHOS PAY</div>
                     
@@ -814,7 +1011,6 @@
 
             </div>
 
-            <!-- Chamada Final para Ação (CTA) -->
             <div style="margin-top: 60px; text-align: center; background: var(--bg-color); border: 1px solid #e2e8f0; border-radius: 16px; padding: 40px; box-shadow: 0 10px 20px rgba(0,0,0,0.02);">
                 <h3 style="color: var(--primary); font-size: 1.6rem; margin-bottom: 25px;">Pronto para otimizar os seus recebíveis?</h3>
                 <a href="https://wa.me/message/SCZQPPLNZPIZP1" class="simulador-btn" style="display: inline-flex; width: auto; background: var(--athos); box-shadow: 0 4px 15px rgba(79, 70, 229, 0.4);" onmouseover="this.style.transform='translateY(-3px)'; this.style.boxShadow='0 8px 25px rgba(79, 70, 229, 0.6)';" onmouseout="this.style.transform='translateY(0)'; this.style.boxShadow='0 4px 15px rgba(79, 70, 229, 0.4)';">
@@ -827,7 +1023,12 @@
     </section>
 
     <script>
-        const observerOptions = { root: null, rootMargin: '0px', threshold: 0.3 };
+        const observerOptions = { 
+            root: null, 
+            rootMargin: '-20% 0px -60% 0px', // Acionamento mais preciso para o menu lateral
+            threshold: 0 
+        };
+        
         const observer = new IntersectionObserver((entries) => {
             entries.forEach(entry => {
                 if (entry.isIntersecting) {
@@ -852,7 +1053,7 @@
             });
 
             const header = document.querySelector('.header-fixed');
-            if (['athos', 'impacto', 'conclusao'].includes(currentId)) {
+            if (['intro', 'athos', 'simulacao', 'conclusao'].includes(currentId)) {
                 header.classList.add('hide-main-title');
             } else {
                 header.classList.remove('hide-main-title');
@@ -868,8 +1069,9 @@
             }
         }
         
+        // Garante que o primeiro container sempre anime ao carregar a página
         window.addEventListener('load', () => {
-            const firstContainer = document.querySelector('#fase1 .container');
+            const firstContainer = document.querySelector('#intro .container');
             if (firstContainer) firstContainer.classList.add('visible');
         });
     </script>
