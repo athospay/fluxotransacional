@@ -2,7 +2,7 @@
 <html lang="pt-BR" style="scroll-behavior: smooth;">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=1200">
     <title>Fluxo Transacional Interativo</title>
     
     <!-- Fontes e Ícones -->
@@ -30,8 +30,9 @@
         body {
             background-color: var(--bg-color);
             color: var(--text-main);
-            overflow-x: hidden;
+            overflow-x: auto;
             padding-top: 80px;
+            min-width: 1200px; /* Força a largura de computador */
         }
 
         /* CABEÇALHO (HEADER FIXO) */
@@ -40,6 +41,7 @@
             top: 0;
             left: 0;
             width: 100%;
+            min-width: 1200px;
             background-color: #0f172a;
             color: #ffffff;
             text-align: center;
@@ -282,7 +284,6 @@
         .arrow-icon.green { color: #10b981; }
         .arrow-icon.gray { color: #94a3b8; }
         
-        /* Ajustes Estruturais para Seta Direcionada (Desktop) */
         .cf-step-row { display: flex; align-items: center; gap: 15px; }
         .hide-on-mobile { display: block; }
         .show-on-mobile { display: none !important; }
@@ -325,90 +326,6 @@
         .quote-banner p { font-size: 1.15rem; color: #64748b; max-width: 800px; margin: 0 auto; line-height: 1.6; }
         .quote-banner .green-line { width: 100%; height: 4px; background: #22c55e; margin: 30px auto; border-radius: 2px; }
 
-        /* RESPONSIVIDADE (MEDIA QUERIES) */
-        @media (max-width: 1150px) { .cf-flow { flex-wrap: wrap; } }
-        
-        @media (max-width: 992px) {
-            .hero-grid { grid-template-columns: 1fr; text-align: center; gap: 30px; }
-            .hero-grid > div:first-child { display: flex; flex-direction: column; align-items: center; }
-            .content-grid, .grid-top, .grid-cards, .overview-grid, .comparison-grid { grid-template-columns: 1fr; }
-            .container { padding: 40px 30px; }
-            .side-nav { display: none; }
-            
-            /* Ajuste de Títulos base */
-            h1 { font-size: 2.5rem; }
-            h2 { font-size: 1.8rem; }
-            
-            /* Break points Fluxograma Split */
-            .cf-flow { flex-direction: column; }
-            .arrow-icon { transform: rotate(90deg); margin: 10px 0; }
-            .cf-arrow-wrapper { gap: 10px; flex-direction: row; }
-            .cf-arrow-wrapper .arrow-icon { transform: rotate(0deg); }
-            .cf-branch { flex-direction: row; flex-wrap: wrap; justify-content: center;}
-            
-            .hide-on-mobile { display: none !important; }
-            .show-on-mobile { display: block !important; }
-            
-            /* Break points Simulação */
-            .sim-grid { grid-template-columns: 1fr; }
-            .sim-results-top { flex-direction: column; align-items: center; gap: 15px;}
-            .quote-banner h3 { font-size: 2.5rem; }
-        }
-
-        @media (max-width: 768px) {
-            .section { padding: 40px 15px; }
-            .container { padding: 30px 15px; }
-            
-            /* Redução drástica de tipografia para mobile pequeno */
-            h1 { font-size: 2rem !important; }
-            h2 { font-size: 1.6rem !important; }
-            p.subtitle { font-size: 1rem; margin-bottom: 25px; }
-            .cf-title { font-size: 1.8rem; margin-bottom: 25px; }
-            
-            /* Elementos Otimizados */
-            .mockup-terminal { width: 100%; max-width: 280px; }
-            .alert-box p, .alert-text { text-align: left; }
-            
-            .tax-bar { flex-direction: column; height: auto; }
-            .tax-left, .tax-right { width: 100%; padding: 25px 15px; }
-            .tax-bracket-label { font-size: 0.85rem; padding: 0 10px; width: 90%; white-space: normal; text-align: center; }
-            .escape-arrow { display: none; }
-            
-            .flow-box { flex-direction: column; align-items: center; text-align: center; gap: 15px; }
-            .athos-highlight { flex-direction: column; align-items: center; text-align: center; padding: 20px; gap: 15px; }
-            .athos-highlight > div { display: flex; flex-direction: column; align-items: center; }
-            
-            .example-box, .alert-banner, .alert-box { flex-direction: column; text-align: center; gap: 15px; }
-            .overview-card { padding: 20px 15px; }
-            .ciclo-box { padding: 25px 15px; }
-            .simulador-btn { width: 100%; justify-content: center; font-size: 1rem; }
-            .grid-cards { gap: 15px; }
-            
-            /* Ajustes Finos Fluxograma */
-            .cf-branch { flex-direction: column; }
-            .cf-step-row { width: 100%; justify-content: center; }
-            .cf-arrow-wrapper { flex-direction: column; }
-            .cf-arrow-wrapper .arrow-icon { transform: rotate(90deg); }
-            .cf-step, .cf-step.bg-green { width: 100%; max-width: 100%; }
-            .cf-info-card { width: 100%; }
-            
-            /* Ajustes Finos Simulação Matemática */
-            .sim-header { flex-direction: column; gap: 10px; border-radius: 16px; text-align: center; align-items: center; }
-            .sim-header span { justify-content: center; }
-            .sim-header span:not(:last-child)::after { display: none; } /* Oculta as divisórias verticais | */
-            .sim-res-box { min-width: 100%; text-align: center; }
-            .sim-data-block h4 { font-size: 1.6rem !important; }
-            .sim-eco-block h4 { font-size: 2.2rem; }
-            
-            .comparison-grid > div { padding: 30px 20px !important; }
-            .quote-banner { padding: 30px 20px !important; }
-            .quote-banner h3 { font-size: 1.8rem; }
-            
-            .scroll-indicator { bottom: 15px; }
-            .section { padding-bottom: 60px; }
-            .mockup-item { padding: 10px; }
-            .mockup-text { font-size: 0.75rem; }
-        }
     </style>
 </head>
 <body>
@@ -1045,7 +962,7 @@
     <script>
         const observerOptions = { 
             root: null, 
-            rootMargin: '-20% 0px -60% 0px', // Acionamento mais preciso para o menu lateral
+            rootMargin: '-20% 0px -60% 0px',
             threshold: 0 
         };
         
@@ -1089,7 +1006,6 @@
             }
         }
         
-        // Garante que o primeiro container sempre anime ao carregar a página
         window.addEventListener('load', () => {
             const firstContainer = document.querySelector('#intro .container');
             if (firstContainer) firstContainer.classList.add('visible');
